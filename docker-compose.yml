@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+    php-upstream:
+        image: php:7.2.0-fpm-alpine3.7
+        volumes:
+            - ./:/data/application
+            - ~/.composer:/root/.composer
+        working_dir: /data/application
+
+    nginx:
+        image: nginx:1.13.7-alpine
+        depends_on:
+            - php-upstream
+        volumes:
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+            - ./public:/data/application/public
+        working_dir: /data/application/public
+        environment:
+            VIRTUAL_HOST: www.security.dev
+            HTTPS_METHOD: noredirect
