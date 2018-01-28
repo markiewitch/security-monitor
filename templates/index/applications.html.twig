@@ -1,0 +1,7 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {% for repository in applications %}
+        <a href="{{ url('check', {organization: "gogcom", project: repository.name}) }}">{{ repository.name }}</a><br />
+    {% endfor %}
+{% endblock %}

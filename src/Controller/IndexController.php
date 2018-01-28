@@ -24,9 +24,21 @@ class IndexController extends Controller
     public function indexAction(): Response
     {
         $client = $this->get(Client::class);
+        $applications = $client->organization()->repositories("gogcom");
+
+        return $this->render("index/applications.html.twig",
+            ["applications" => $applications]);
+    }
+
+    /**
+     * @Route(path="check/{organization}/{project}", name="check")
+     */
+    public function checkAction(string $organization, string $project)
+    {
+        $client = $this->get(Client::class);
         $filename = tempnam(sys_get_temp_dir(), "security-monitor");
         $lockfile = base64_decode(
-            $client->repositories()->contents()->show("dzikismigol", "barenote-cli", "composer.lock")["content"]
+            $client->repositories()->contents()->show($organization, $project, "composer.lock")["content"]
         );
         file_put_contents($filename, $lockfile);
         $checker = new SecurityChecker();
