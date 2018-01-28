@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
 
 class OrmProjectsRepository implements ProjectsRepository
 {
@@ -38,6 +39,16 @@ class OrmProjectsRepository implements ProjectsRepository
     public function persist(Project $project)
     {
         $this->em->persist($project);
+        $this->em->flush();
+    }
+
+    public function find(Uuid $uuid)
+    {
+        return $this->em->find('App:Project', $uuid);
+    }
+
+    public function flush(Project $project)
+    {
         $this->em->flush();
     }
 }

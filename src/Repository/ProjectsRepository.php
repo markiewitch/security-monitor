@@ -6,6 +6,7 @@ namespace App\Repository;
 
 
 use App\Entity\Project;
+use Ramsey\Uuid\Uuid;
 
 interface ProjectsRepository
 {
@@ -17,4 +18,8 @@ interface ProjectsRepository
     public function fetchLatest(int $limit = 10, int $after = 0): array;
 
     public function persist(Project $project);
+
+    public function find(Uuid $uuid);
+
+    public function flush(Project $project);
 }

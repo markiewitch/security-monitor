@@ -1,9 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <ul>
-        {% for project in projects %}
-            <li>{{ project.organization }}/{{ project.name }}</li>
+    {% for project in projects %}
+        <h4>{{ project.organization }}/{{ project.name }}
+            <small><a href="{{ path('project_check', {'uuid': project.uuid}) }}">Check</a></small>
+        </h4>
+        <ul>
+        {% for check in project.checks %}
+            <li>{{ check.wasSuccessful ? "success" : "failed" }} - {{ check.finishedAt|date }}</li>
         {% endfor %}
-    </ul>
+        </ul>
+    {% endfor %}
 {% endblock %}
