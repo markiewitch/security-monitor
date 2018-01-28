@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <ul>
+        {% for project in projects %}
+            <li>{{ project.organization }}/{{ project.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

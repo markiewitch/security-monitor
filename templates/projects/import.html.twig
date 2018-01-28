@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for repository in available %}
+        <a class="js-project-create"
+           href="{{ url('project_create', {organization: "gogcom", name: repository.name}) }}">{{ repository.name }}</a>
+        <br/>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let anchors = document.querySelectorAll('.js-project-create');
+
+        for (anchor of anchors) {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                let url = e.target.href;
+                fetch(url, {method: "POST"})
+                    .then(function (response) {
+                        console.log(response);
+                    });
+            })
+        }
+    </script>
+{% endblock %}

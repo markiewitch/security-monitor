@@ -2,7 +2,8 @@ version: '3.4'
 
 services:
     php-upstream:
-        image: php:7.2.0-fpm-alpine3.7
+        build:
+            context: ./docker/php
         volumes:
             - ./:/data/application
             - ~/.composer:/root/.composer
@@ -19,3 +20,12 @@ services:
         environment:
             VIRTUAL_HOST: www.security.dev
             HTTPS_METHOD: noredirect
+
+    mysql:
+        image: mysql:5.7.21
+        ports:
+            - 13306:3306
+        volumes:
+          - ./docker/mysql:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: toor
