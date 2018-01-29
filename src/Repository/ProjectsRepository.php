@@ -7,6 +7,7 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 interface ProjectsRepository
 {
@@ -19,7 +20,11 @@ interface ProjectsRepository
 
     public function persist(Project $project);
 
-    public function find(Uuid $uuid);
+    /**
+     * @param UuidInterface $uuid
+     * @return Project
+     */
+    public function find(UuidInterface $uuid);
 
     public function flush(Project $project);
 }

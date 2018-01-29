@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table>
+        <thead>
+        <tr>
+            <th>Driver</th>
+            <th>Host</th>
+            <th>Created at</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for connection in connections %}
+            <tr>
+                <td>{{ connection.driver }}</td>
+                <td>{{ connection.host }}</td>
+                <td>{{ connection.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

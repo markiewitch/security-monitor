@@ -56,6 +56,7 @@ class ProjectsController extends Controller
         file_put_contents($filename, $lockfile);
         $checker = new SecurityChecker();
         $results = $checker->check($filename);
+        unlink($filename);
         if(count($results) === 0) {
             $check->markAsFinishedSuccessfully();
         }

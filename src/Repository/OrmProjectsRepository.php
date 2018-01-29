@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class OrmProjectsRepository implements ProjectsRepository
 {
@@ -42,7 +43,7 @@ class OrmProjectsRepository implements ProjectsRepository
         $this->em->flush();
     }
 
-    public function find(Uuid $uuid)
+    public function find(UuidInterface $uuid)
     {
         return $this->em->find('App:Project', $uuid);
     }
