@@ -13,7 +13,7 @@ class GitlabConnection implements VcsConnectionInterface
 
     public function __construct(VcsConnectionInfo $connectionInfo, Client $client)
     {
-        $client->authenticate($connectionInfo->getToken(), null, Client::AUTH_HTTP_TOKEN);
+        $client->authenticate($connectionInfo->getToken(), Client::AUTH_HTTP_TOKEN);
         $client->setUrl($connectionInfo->getHost());
         $this->client = $client;
     }
@@ -23,11 +23,12 @@ class GitlabConnection implements VcsConnectionInterface
         if ($organization != '') {
             $projects = $this->client->projects()->all(['search' => $organization]);
         } else {
+//        var_dump($this->client);die();
             $projects = $this->client->projects()->all();
         }
-var_dump($projects);die();
+//var_dump($projects);die();
         return array_map(function (array $gitlabProject) {
-            return new VcsProjectInfo($gitlabProject['namespace'], $gitlabProject['name']);
+            return new VcsProjectInfo($gitlabProject['namespace']['name'], $gitlabProject['name']);
         }, $projects);
     }
 

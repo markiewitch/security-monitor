@@ -3,7 +3,7 @@
 {% block body %}
     {% for repository in available %}
         <a class="js-project-create"
-           href="{{ url('project_create', {organization: "gogcom", name: repository.name}) }}">{{ repository.name }}</a>
+           href="{{ url('project_create', {organization: repository.organization, name: repository.name}) }}">{{ repository.name }}</a>
         <br/>
     {% endfor %}
 {% endblock %}

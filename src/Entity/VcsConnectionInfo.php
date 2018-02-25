@@ -44,6 +44,11 @@ class VcsConnectionInfo
         $this->createdAt = new \DateTime();
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getDriver()
     {
         return $this->driver;

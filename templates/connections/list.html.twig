@@ -8,6 +8,7 @@
             <th>Driver</th>
             <th>Host</th>
             <th>Created at</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -16,6 +17,7 @@
                 <td>{{ connection.driver }}</td>
                 <td>{{ connection.host }}</td>
                 <td>{{ connection.createdAt|date }}</td>
+                <td><a href="{{ path('import_project', {'connectionId': connection.id }) }}">Import a project</a></td>
             </tr>
         {% endfor %}
         </tbody>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dto\VcsProjectInfo;
 use App\Entity\Check;
 use App\Entity\Project;
 use App\Repository\OrmConnectionsRepository;
@@ -35,18 +36,7 @@ class ProjectsController extends Controller
     }
 
     /**
-     * @Route(path="/import", name="project_import")
-     */
-    public function import(Client $client): Response
-    {
-        $available = $client->organization()->repositories("gogcom");
-
-        return $this->render("projects/import.html.twig",
-            ["available" => $available]);
-    }
-
-    /**
-     * @Route(path="/import/{connectionId}")
+     * @Route(path="/import/{connectionId}", name="import_project")
      */
     public function importFromConnection(int $connectionId, OrmConnectionsRepository $connectionsRepository)
     {
@@ -59,7 +49,8 @@ class ProjectsController extends Controller
             throw new \RuntimeException("Unkown driver");
         }
 
-        $available = $driver->listProjects("gogcom");
+        /** @var VcsProjectInfo[] $available */
+        $available = $driver->listProjects();
         return $this->render("projects/import.html.twig",
             ["available" => $available]);
     }
