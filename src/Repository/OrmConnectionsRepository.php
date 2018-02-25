@@ -31,6 +31,11 @@ class OrmConnectionsRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function find(int $id): VcsConnectionInfo
+    {
+        return $this->em->find(VcsConnectionInfo::class, $id);
+    }
+
     public function persist(VcsConnectionInfo $connectionInfo)
     {
         $this->em->persist($connectionInfo);

@@ -6,8 +6,13 @@ namespace App\Controller;
 
 use App\Entity\Check;
 use App\Entity\Project;
+use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
+use App\Vcs\GithubConnection;
+use App\Vcs\GitlabConnection;
 use Github\Client;
+use Github\Client as GithubClient;
+use Gitlab\Client as GitlabClient;
 use Ramsey\Uuid\Uuid;
 use SensioLabs\Security\SecurityChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,23 +46,40 @@ class ProjectsController extends Controller
     }
 
     /**
-     * @Route(path="/check/{uuid}", name="project_check")
+     * @Route(path="/import/{connectionId}")
+     */
+    public function importFromConnection(int $connectionId, OrmConnectionsRepository $connectionsRepository)
+    {
+        $connectionInfo = $connectionsRepository->find($connectionId);
+        if ($connectionInfo->getDriver() === "github") {
+            $driver = new GithubConnection($connectionInfo, new GithubClient());
+        } elseif ($connectionInfo->getDriver() === "gitlab") {
+            $driver = new GitlabConnection($connectionInfo, new GitlabClient());
+        } else {
+            throw new \RuntimeException("Unkown driver");
+        }
+
+        $available = $driver->listProjects("gogcom");
+        return $this->render("projects/import.html.twig",
+            ["available" => $available]);
+    }
+
+    /**
+     * @Route(path="/check/{projectUuid}", name="project_check")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function check(Client $client, string $uuid, ProjectsRepository $repository): Response
+    public function check(string $projectUuid, ProjectsRepository $repository): Response
     {
-        $project = $repository->find(Uuid::fromString($uuid));
+        $project = $repository->find(Uuid::fromString($projectUuid));
+        $client = $project->getConnection();
         $check = Check::create($project);
         $filename = tempnam(sys_get_temp_dir(), "security-monitor");
-        $lockfile = base64_decode(
-            $client->repositories()->contents()->show($project->getOrganization(), $project->getName(),
-                "composer.lock")["content"]
-        );
+        $lockfile = $client->fetchLockfile($project->getOrganization(), $project->getName());
         file_put_contents($filename, $lockfile);
         $checker = new SecurityChecker();
         $results = $checker->check($filename);
         unlink($filename);
-        if(count($results) === 0) {
+        if (count($results) === 0) {
             $check->markAsFinishedSuccessfully();
         }
         $repository->flush($project);

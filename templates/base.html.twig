@@ -6,11 +6,18 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<ul>
-    <li><a href="{{ path('project_import') }}">Import project</a></li>
-    <li><a href="{{ path('project_list') }}">List projects</a></li>
-    <li><a href="{{ path('connections_list') }}">List VCS connections</a></li>
-</ul>
+{% block menu %}
+    {% set menuLinks = [
+        {'route': 'project_import', 'title': 'Import project'},
+        {'route': 'project_list', 'title': 'List projects'},
+        {'route': 'connections_list', 'title': 'List VCS connections'},
+    ] %}
+    <ul>
+        {% for entry in menuLinks %}
+            <li><a href="{{ path(entry.route) }}">{{ entry.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
