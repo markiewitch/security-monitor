@@ -47,6 +47,9 @@
             "ref": "c1431086fec31f17fbcfe6d6d7e92059458facc1"
         }
     },
+    "doctrine/event-manager": {
+        "version": "v1.0.0"
+    },
     "doctrine/inflector": {
         "version": "v1.3.0"
     },
@@ -61,6 +64,12 @@
     },
     "doctrine/orm": {
         "version": "v2.6.0"
+    },
+    "doctrine/persistence": {
+        "version": "v1.0.0"
+    },
+    "doctrine/reflection": {
+        "version": "v1.0.0"
     },
     "guzzlehttp/psr7": {
         "version": "1.4.2"
@@ -170,9 +179,6 @@
             "ref": "e65a105bf4cd5b1b79012ba029954927f05922e8"
         }
     },
-    "symfony/asset": {
-        "version": "v4.0.3"
-    },
     "symfony/cache": {
         "version": "v4.0.3"
     },
@@ -250,6 +256,9 @@
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
+    },
+    "symfony/polyfill-ctype": {
+        "version": "v1.9.0"
     },
     "symfony/polyfill-intl-icu": {
         "version": "v1.6.0"

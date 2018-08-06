@@ -23,10 +23,10 @@ class GitlabConnection implements VcsConnectionInterface
     public function listProjects(string $organization = ''): array
     {
         if ($organization != '') {
-            $projects = $this->client->projects()->all(['search' => $organization]);
+            $projects = $this->client->projects()->all(['search' => $organization, 'per_page'=> 80]);
         } else {
             //        var_dump($this->client);die();
-            $projects = $this->client->projects()->all();
+            $projects = $this->client->projects()->all(['per_page' => 80]);
         }
 
         //var_dump($projects);die();
