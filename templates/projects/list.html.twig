@@ -2,7 +2,7 @@
 
 {% block body %}
     {% for project in projects %}
-        {% set checkClass = (project.checks|last).wasSuccessful ? 'box-success' : 'box-danger' %}
+        {% set checkClass = project.checks|length > 0 ? (project.checks|last).wasSuccessful ? 'box-success' : 'box-danger' : '' %}
         <div class="box {{ checkClass }}">
             <div class="box-header">
                 <h3 class="box-title">{{ project.organization }}/{{ project.name }}

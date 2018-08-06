@@ -17,7 +17,7 @@ class GithubConnection implements VcsConnectionInterface
         $this->client = $client;
     }
 
-    public function listProjects(string $organization = ''): array
+    public function listProjects(string $organization = '', int $page = 1): array
     {
         if ($organization != '') {
             $projects = $this->client->organization()->repositories($organization);

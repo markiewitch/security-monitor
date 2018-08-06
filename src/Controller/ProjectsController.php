@@ -18,6 +18,7 @@ use Ramsey\Uuid\Uuid;
 use SensioLabs\Security\SecurityChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,8 +39,10 @@ class ProjectsController extends Controller
     /**
      * @Route(path="/import/{connectionId}", name="import_project")
      */
-    public function importFromConnection(int $connectionId, OrmConnectionsRepository $connectionsRepository)
+    public function importFromConnection(Request $request, int $connectionId, OrmConnectionsRepository $connectionsRepository)
     {
+        $page = $request->query->getInt('page', 1);
+
         $connectionInfo = $connectionsRepository->find($connectionId);
         if ($connectionInfo->getDriver() === "github") {
             $driver = new GithubConnection($connectionInfo, new GithubClient());
@@ -50,7 +53,7 @@ class ProjectsController extends Controller
         }
 
         /** @var VcsProjectInfo[] $available */
-        $available = $driver->listProjects();
+        $available = $driver->listProjects('', $page);
         return $this->render("projects/import.html.twig",
             ["available" => $available]);
     }
