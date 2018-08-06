@@ -1,11 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for repository in available %}
-        <a class="js-project-create"
-           href="{{ url('project_create', {organization: repository.organization, name: repository.name, connectionId: repository.connectionId}) }}">{{ repository.name }}</a>
-        <br/>
-    {% endfor %}
+    <div class="box">
+        <div class="box-body">
+            {% for repository in available %}
+                <a class="js-project-create"
+                   href="{{ url('project_create', {organization: repository.organization, name: repository.name, connectionId: repository.connectionId}) }}">{{ repository.name }}</a>
+                <br/>
+            {% endfor %}
+        </div>
+        <div class="box-footer clearfix">
+            <ul class="pagination pagination-sm no-margin">
+                {% if page > 1 %}
+                    <li><a href="{{ path('import_project', {connectionId: connectionId,page: 1}) }}">First</a></li>
+                    {% if page > 2 %}
+                        <li>
+                            <a href="{{ path('import_project', {connectionId: connectionId, page: page - 1}) }}">Previous</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li><a href="{{ path('import_project', {connectionId: connectionId, page: page + 1}) }}">Next</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
 {% endblock %}
 
 {% block javascripts %}

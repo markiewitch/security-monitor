@@ -55,7 +55,7 @@ class ProjectsController extends Controller
         /** @var VcsProjectInfo[] $available */
         $available = $driver->listProjects('', $page);
         return $this->render("projects/import.html.twig",
-            ["available" => $available]);
+            ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);
     }
 
     /**
