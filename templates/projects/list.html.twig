@@ -2,13 +2,22 @@
 
 {% block body %}
     {% for project in projects %}
-        <h4>{{ project.organization }}/{{ project.name }}
-            <small><a href="{{ path('project_check', {'projectUuid': project.uuid}) }}">Check</a></small>
-        </h4>
-        <ul>
-        {% for check in project.checks %}
-            <li>{{ check.wasSuccessful ? "success" : "failed" }} - {{ check.finishedAt|date }}</li>
-        {% endfor %}
-        </ul>
+        {% set checkClass = (project.checks|last).wasSuccessful ? 'box-success' : 'box-danger' %}
+        <div class="box {{ checkClass }}">
+            <div class="box-header">
+                <h3 class="box-title">{{ project.organization }}/{{ project.name }}
+                    <small><a href="{{ path('project_check', {'projectUuid': project.uuid}) }}">Check</a></small>
+                </h3>
+            </div>
+            <div class="box-body">
+                <ul>
+                    {% for check in project.checks %}
+                        {% set itemClass = check.wasSuccessful ? '' : 'text-danger' %}
+                        <li class="{{ itemClass }}">{{ check.wasSuccessful ? "success" : "failed" }} - {{ check.finishedAt|date }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
     {% endfor %}
 {% endblock %}
