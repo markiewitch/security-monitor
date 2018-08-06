@@ -12,3 +12,8 @@ migrate:
 	docker-compose run --rm --no-deps php-upstream bash -c "\
 		bin/console d:m:migrate -n --env=dev\
 	"
+build-front-dev:
+	docker-compose -f docker-compose-nodejs.yml run --rm --no-deps nodejs sh -c "\
+		yarn install && \
+		yarn run encore dev \
+	"
