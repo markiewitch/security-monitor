@@ -1,25 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('connections_create') }}">Add new connection</a>
-    <table>
-        <thead>
-        <tr>
-            <th>Driver</th>
-            <th>Host</th>
-            <th>Created at</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for connection in connections %}
-            <tr>
-                <td>{{ connection.driver }}</td>
-                <td>{{ connection.host }}</td>
-                <td>{{ connection.createdAt|date }}</td>
-                <td><a href="{{ path('import_project', {'connectionId': connection.id }) }}">Import a project</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Lista połączeń</h3>
+            <div class="box-tools">
+                <a href="{{ path('connections_create') }}" title="Dodaj nowe połączenie"><span class="fa fa-plus"></span></a>
+            </div>
+        </div>
+        <div class="box-body table-responsive no-padding">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Driver</th>
+                    <th>Host</th>
+                    <th>Created at</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for connection in connections %}
+                    <tr>
+                        <td>{{ connection.driver }}</td>
+                        <td>{{ connection.host }}</td>
+                        <td>{{ connection.createdAt|date }}</td>
+                        <td><a href="{{ path('import_project', {'connectionId': connection.id }) }}">Import a
+                                project</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 {% endblock %}
