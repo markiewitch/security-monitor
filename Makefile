@@ -7,3 +7,8 @@ certs:
     	-subj "/C=PL/ST=Mazowieckie/L=Warsaw/O=Markiewicz/OU=Org/CN=*.security.dev" \
     	-config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:*.security.dev")) \
     	-reqexts SAN -extensions SAN'
+
+migrate:
+	docker-compose run --rm --no-deps php-upstream bash -c "\
+		bin/console d:m:migrate -n --env=dev\
+	"

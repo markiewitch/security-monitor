@@ -7,11 +7,13 @@ class VcsProjectInfo
 {
     private $organization;
     private $name;
+    private $connection;
 
-    public function __construct(string $organization, string $name)
+    public function __construct(string $organization, string $name, int $connection)
     {
         $this->organization = $organization;
         $this->name         = $name;
+        $this->connection   = $connection;
     }
 
     /**
@@ -28,5 +30,10 @@ class VcsProjectInfo
     public function getOrganization(): string
     {
         return $this->organization;
+    }
+
+    public function getConnectionId(): int
+    {
+        return $this->connection;
     }
 }

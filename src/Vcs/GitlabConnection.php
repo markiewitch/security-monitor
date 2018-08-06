@@ -10,9 +10,11 @@ use Gitlab\Client;
 class GitlabConnection implements VcsConnectionInterface
 {
     private $client;
+    private $info;
 
     public function __construct(VcsConnectionInfo $connectionInfo, Client $client)
     {
+        $this->info = $connectionInfo;
         $client->authenticate($connectionInfo->getToken(), Client::AUTH_HTTP_TOKEN);
         $client->setUrl($connectionInfo->getHost());
         $this->client = $client;
@@ -23,17 +25,28 @@ class GitlabConnection implements VcsConnectionInterface
         if ($organization != '') {
             $projects = $this->client->projects()->all(['search' => $organization]);
         } else {
-//        var_dump($this->client);die();
+            //        var_dump($this->client);die();
             $projects = $this->client->projects()->all();
         }
-//var_dump($projects);die();
+
+        //var_dump($projects);die();
         return array_map(function (array $gitlabProject) {
-            return new VcsProjectInfo($gitlabProject['namespace']['name'], $gitlabProject['name']);
+            return new VcsProjectInfo($gitlabProject['namespace']['name'], $gitlabProject['name'],
+                                      $this->info->getId());
         }, $projects);
     }
 
     public function fetchLockfile(string $organization, string $project)
     {
-        throw new \RuntimeException("not implemented");
+        $repositories = $this->client->projects()->all(['search' => "$project"]);
+        $repository   = array_values(array_filter($repositories,
+            function (array $repository) use ($organization, $project) {
+                return $repository['path_with_namespace'] === "$organization/$project";
+            }))[0];
+        $repositoryId = $repository['id'];
+        //        VarDumper::dump($repository);
+        //        throw new \RuntimeException("not implemented");
+        return $this->client->repositoryFiles()->getRawFile($repositoryId, 'composer.lock', 'master');
+        //        return base64_decode($this->client->repositoryFiles()->getRawFile();
     }
 }

@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Github\Client as GithubClient;
 use Gitlab\Client as GitlabClient;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -65,8 +64,8 @@ class Project
     public function __construct(string $organization, string $name)
     {
         $this->organization = $organization;
-        $this->name = $name;
-        $this->checks = new ArrayCollection();
+        $this->name         = $name;
+        $this->checks       = new ArrayCollection();
     }
 
     public function getConnection(): VcsConnectionInterface
@@ -78,6 +77,11 @@ class Project
         } else {
             throw new \RuntimeException("Unkown driver");
         }
+    }
+
+    public function setConnection(VcsConnectionInfo $connection)
+    {
+        $this->connection = $connection;
     }
 
     public function getUuid(): UuidInterface

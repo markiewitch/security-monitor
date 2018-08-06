@@ -79,12 +79,14 @@ class ProjectsController extends Controller
     }
 
     /**
-     * @Route(path="/create/{organization}/{name}", name="project_create", methods={"POST"})
+     * @Route(path="/create/{organization}/{name}/{connectionId}", name="project_create", methods={"POST"})
      */
-    public function create(string $organization, string $name, ProjectsRepository $repository): Response
+    public function create(string $organization, string $name, int $connectionId, ProjectsRepository $repository, OrmConnectionsRepository $connections): Response
     {
         try {
+            $connection = $connections->find($connectionId);
             $project = new Project($organization, $name);
+            $project->setConnection($connection);
             $repository->persist($project);
         } catch (\Throwable $t) {
             return JsonResponse::create(['error' => $t->getMessage()], JsonResponse::HTTP_BAD_REQUEST);

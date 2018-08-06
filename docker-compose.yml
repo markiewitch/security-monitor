@@ -2,8 +2,7 @@ version: '3.4'
 
 services:
     php-upstream:
-        build:
-            context: ./docker/php
+        image: registry.gitlab.com/marszczybrew/php-fpm
         volumes:
             - ./:/data/application
             - ~/.composer:/root/.composer
