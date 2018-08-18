@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Dto\VcsProjectInfo;
 use App\Entity\Project;
 use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
 use App\Service\SecurityChecker;
-use App\Vcs\GithubConnection;
-use App\Vcs\GitlabConnection;
-use Github\Client as GithubClient;
-use Gitlab\Client as GitlabClient;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,16 +40,9 @@ class ProjectsController extends Controller
         $page = $request->query->getInt('page', 1);
 
         $connectionInfo = $connectionsRepository->find($connectionId);
-        if ($connectionInfo->getDriver() === "github") {
-            $driver = new GithubConnection($connectionInfo, new GithubClient());
-        } elseif ($connectionInfo->getDriver() === "gitlab") {
-            $driver = new GitlabConnection($connectionInfo, new GitlabClient());
-        } else {
-            throw new \RuntimeException("Unkown driver");
-        }
 
-        /** @var VcsProjectInfo[] $available */
-        $available = $driver->listProjects('', $page);
+        $available = $connectionInfo->getConnection()
+            ->listProjects('', $page);
 
         return $this->render("projects/import.html.twig",
                              ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);
@@ -80,14 +68,14 @@ class ProjectsController extends Controller
         string $organization,
         string $name,
         int $connectionId,
-        ProjectsRepository $repository,
+        ProjectsRepository $projects,
         OrmConnectionsRepository $connections): Response
     {
         try {
             $connection = $connections->find($connectionId);
             $project    = new Project($organization, $name);
             $project->setConnection($connection);
-            $repository->persist($project);
+            $projects->persist($project);
         } catch (\Throwable $t) {
             return JsonResponse::create(['error' => $t->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }

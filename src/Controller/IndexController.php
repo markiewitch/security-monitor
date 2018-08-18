@@ -29,21 +29,4 @@ class IndexController extends Controller
         return $this->render("index/applications.html.twig",
             ["applications" => $applications]);
     }
-
-    /**
-     * @Route(path="check/{organization}/{project}", name="check")
-     */
-    public function checkAction(string $organization, string $project)
-    {
-        $client = $this->get(Client::class);
-        $filename = tempnam(sys_get_temp_dir(), "security-monitor");
-        $lockfile = base64_decode(
-            $client->repositories()->contents()->show($organization, $project, "composer.lock")["content"]
-        );
-        file_put_contents($filename, $lockfile);
-        $checker = new SecurityChecker();
-        $results = $checker->check($filename);
-        return $this->render("index/index.html.twig",
-            ["filename" => $filename, "results" => $results]);
-    }
 }

@@ -3,7 +3,12 @@
 
 namespace App\Entity;
 
+use App\Vcs\GithubConnection;
+use App\Vcs\GitlabConnection;
+use App\Vcs\VcsConnectionInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Github\Client as GithubClient;
+use Gitlab\Client as GitlabClient;
 
 /**
  * @ORM\Entity()
@@ -91,5 +96,18 @@ class VcsConnectionInfo
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    public function getConnection(): VcsConnectionInterface
+    {
+        if ($this->driver === "github") {
+            $driver = new GithubConnection($this, new GithubClient());
+        } elseif ($this->driver === "gitlab") {
+            $driver = new GitlabConnection($this, new GitlabClient());
+        } else {
+            throw new \RuntimeException("Unkown driver");
+        }
+
+        return $driver;
     }
 }
