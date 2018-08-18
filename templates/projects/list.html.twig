@@ -13,7 +13,8 @@
                 <ul>
                     {% for check in project.checks %}
                         {% set itemClass = check.wasSuccessful ? '' : 'text-danger' %}
-                        <li class="{{ itemClass }}">{{ check.wasSuccessful ? "success" : "failed" }} - {{ check.finishedAt|date }}</li>
+                        <li class="{{ itemClass }}">{{ check.wasSuccessful ? "success" : "failed (" ~ check.vulnerabilities|length ~ " vulnerable package found)" }}
+                            - {{ check.finishedAt|date }}</li>
                     {% endfor %}
                 </ul>
             </div>

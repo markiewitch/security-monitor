@@ -56,22 +56,31 @@ class Check
     private function __construct(Project $project)
     {
         $this->createdAt = new \DateTime();
-        $this->project = $project;
+        $this->project   = $project;
     }
 
     public static function create(Project $project)
     {
         $check = new self($project);
         $project->addCheck($check);
+
         return $check;
     }
 
     public function markAsFinishedSuccessfully()
     {
-        $this->wasSuccessful = true;
-        $this->vulnerabilities = [];
+        $this->wasSuccessful        = true;
+        $this->vulnerabilities      = [];
         $this->vulnerabilitiesCount = 0;
-        $this->finishedAt = new \DateTime();
+        $this->finishedAt           = new \DateTime();
+    }
+
+    public function finishWithVulnerabilities(array $vulnerabilities)
+    {
+        $this->wasSuccessful        = false;
+        $this->vulnerabilities      = $vulnerabilities;
+        $this->vulnerabilitiesCount = count($vulnerabilities);
+        $this->finishedAt           = new \DateTime();
     }
 
     public function getFinishedAt()
@@ -82,5 +91,10 @@ class Check
     public function wasSuccessful()
     {
         return $this->wasSuccessful;
+    }
+
+    public function getVulnerabilities()
+    {
+        return $this->vulnerabilities;
     }
 }

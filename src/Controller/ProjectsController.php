@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Dto\VcsProjectInfo;
-use App\Entity\Check;
 use App\Entity\Project;
 use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
+use App\Service\SecurityChecker;
 use App\Vcs\GithubConnection;
 use App\Vcs\GitlabConnection;
-use Github\Client;
 use Github\Client as GithubClient;
 use Gitlab\Client as GitlabClient;
 use Ramsey\Uuid\Uuid;
-use SensioLabs\Security\SecurityChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,13 +31,16 @@ class ProjectsController extends Controller
     public function show(ProjectsRepository $repository): Response
     {
         return $this->render("projects/list.html.twig",
-            ["projects" => $repository->fetchLatest()]);
+                             ["projects" => $repository->fetchLatest()]);
     }
 
     /**
      * @Route(path="/import/{connectionId}", name="import_project")
      */
-    public function importFromConnection(Request $request, int $connectionId, OrmConnectionsRepository $connectionsRepository)
+    public function importFromConnection(
+        Request $request,
+        int $connectionId,
+        OrmConnectionsRepository $connectionsRepository)
     {
         $page = $request->query->getInt('page', 1);
 
@@ -54,41 +55,37 @@ class ProjectsController extends Controller
 
         /** @var VcsProjectInfo[] $available */
         $available = $driver->listProjects('', $page);
+
         return $this->render("projects/import.html.twig",
-            ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);
+                             ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);
     }
 
     /**
      * @Route(path="/check/{projectUuid}", name="project_check")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function check(string $projectUuid, ProjectsRepository $repository): Response
+    public function check(string $projectUuid, ProjectsRepository $repository, SecurityChecker $checker): Response
     {
         $project = $repository->find(Uuid::fromString($projectUuid));
-        $client = $project->getConnection();
-        $check = Check::create($project);
-        $filename = tempnam(sys_get_temp_dir(), "security-monitor");
-        $lockfile = $client->fetchLockfile($project->getOrganization(), $project->getName());
-        file_put_contents($filename, $lockfile);
-        $checker = new SecurityChecker();
-        $results = $checker->check($filename);
-        unlink($filename);
-        if (count($results) === 0) {
-            $check->markAsFinishedSuccessfully();
-        }
-        $repository->flush($project);
-        return $this->render("index/index.html.twig",
-            ["filename" => $filename, "results" => $results]);
+
+        $checker->check($project);
+
+        return $this->redirectToRoute('project_list');
     }
 
     /**
      * @Route(path="/create/{organization}/{name}/{connectionId}", name="project_create", methods={"POST"})
      */
-    public function create(string $organization, string $name, int $connectionId, ProjectsRepository $repository, OrmConnectionsRepository $connections): Response
+    public function create(
+        string $organization,
+        string $name,
+        int $connectionId,
+        ProjectsRepository $repository,
+        OrmConnectionsRepository $connections): Response
     {
         try {
             $connection = $connections->find($connectionId);
-            $project = new Project($organization, $name);
+            $project    = new Project($organization, $name);
             $project->setConnection($connection);
             $repository->persist($project);
         } catch (\Throwable $t) {
