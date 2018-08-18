@@ -3,11 +3,14 @@
 {% block body %}
     {% for project in projects %}
         {% set checkClass = project.checks|length > 0 ? (project.checks|last).wasSuccessful ? 'box-success' : 'box-danger' : '' %}
-        <div class="box {{ checkClass }}">
+        <div class="box collapsed-box {{ checkClass }}">
             <div class="box-header">
                 <h3 class="box-title">{{ project.organization }}/{{ project.name }}
                     <small><a href="{{ path('project_check', {'projectUuid': project.uuid}) }}">Check</a></small>
                 </h3>
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Expand"><i class="fa fa-plus"></i></button>
+                </div>
             </div>
             <div class="box-body">
                 <ul>

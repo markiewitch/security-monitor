@@ -8,7 +8,7 @@
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css');
 
-require('../../node_modules/bootstrap/dist/js/npm');
+require('../../node_modules/admin-lte/dist/js/adminlte');
 require('../../node_modules/bootstrap/dist/css/bootstrap.css');
 require('../../node_modules/admin-lte/dist/css/AdminLTE.css');
 require('../../node_modules/admin-lte/dist/css/skins/skin-black.css');

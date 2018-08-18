@@ -23,10 +23,13 @@ class ProjectsController extends Controller
     /**
      * @Route(path="/", name="project_list")
      */
-    public function show(ProjectsRepository $repository): Response
+    public function show(Request $request, ProjectsRepository $repository): Response
     {
+        $perPage = $request->query->getInt('perPage', 12);
+        $page    = $request->query->getInt('page', 1);
+
         return $this->render("projects/list.html.twig",
-                             ["projects" => $repository->fetchLatest()]);
+                             ["projects" => $repository->fetchLatest($perPage, $perPage * ($page - 1))]);
     }
 
     /**
@@ -37,12 +40,13 @@ class ProjectsController extends Controller
         int $connectionId,
         OrmConnectionsRepository $connectionsRepository)
     {
-        $page = $request->query->getInt('page', 1);
+        $page         = $request->query->getInt('page', 1);
+        $organization = $request->query->get('organization', '');
 
         $connectionInfo = $connectionsRepository->find($connectionId);
 
         $available = $connectionInfo->getConnection()
-            ->listProjects('', $page);
+            ->listProjects($organization, $page);
 
         return $this->render("projects/import.html.twig",
                              ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);

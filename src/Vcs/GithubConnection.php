@@ -10,10 +10,12 @@ use Github\Client;
 class GithubConnection implements VcsConnectionInterface
 {
     private $client;
+    private $info;
 
     public function __construct(VcsConnectionInfo $connectionInfo, Client $client)
     {
         $client->authenticate($connectionInfo->getToken(), null, Client::AUTH_HTTP_TOKEN);
+        $this->info = $connectionInfo;
         $this->client = $client;
     }
 
@@ -26,7 +28,7 @@ class GithubConnection implements VcsConnectionInterface
         }
 
         return array_map(function (array $githubProject) {
-            return new VcsProjectInfo($githubProject['owner']['login'], $githubProject['name']);
+            return new VcsProjectInfo($githubProject['owner']['login'], $githubProject['name'], $this->info->getId());
         }, $projects);
     }
 
