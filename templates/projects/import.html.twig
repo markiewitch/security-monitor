@@ -2,6 +2,21 @@
 
 {% block body %}
     <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Filter</h3>
+        </div>
+        <form class="form-horizontal">
+            <div class="box-body">
+                <label class="col-sm-2 control-label" for="organization">Organization</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="organization" name="organization"
+                           title="Organization"
+                           value="{{ app.request.query.get('organization', '') }}"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="box">
         <div class="box-body">
             {% for repository in available %}
                 <a class="js-project-create"
@@ -12,14 +27,18 @@
         <div class="box-footer clearfix">
             <ul class="pagination pagination-sm no-margin">
                 {% if page > 1 %}
-                    <li><a href="{{ path('import_project', {connectionId: connectionId,page: 1}) }}">First</a></li>
+                    <li>
+                        <a href="{{ path('import_project', {connectionId: connectionId,page: 1, organization: app.request.query.get('organization', '')}) }}">First</a>
+                    </li>
                     {% if page > 2 %}
                         <li>
-                            <a href="{{ path('import_project', {connectionId: connectionId, page: page - 1}) }}">Previous</a>
+                            <a href="{{ path('import_project', {connectionId: connectionId, page: page - 1, organization: app.request.query.get('organization', '') }) }}">Previous</a>
                         </li>
                     {% endif %}
                 {% endif %}
-                <li><a href="{{ path('import_project', {connectionId: connectionId, page: page + 1}) }}">Next</a></li>
+                <li>
+                    <a href="{{ path('import_project', {connectionId: connectionId, page: page + 1, organization: app.request.get('organization', '')}) }}">Next</a>
+                </li>
 
             </ul>
 

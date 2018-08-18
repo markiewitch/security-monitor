@@ -22,7 +22,7 @@ class GithubConnection implements VcsConnectionInterface
     public function listProjects(string $organization = '', int $page = 1, int $perPage = 20): array
     {
         if ($organization != '') {
-            $projects = $this->client->organization()->repositories($organization);
+            $projects = $this->client->organization()->repositories($organization, 'all', $page);
         } else {
             $projects = $this->client->repositories()->all();
         }
