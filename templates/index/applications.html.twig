@@ -2,6 +2,6 @@
 
 {% block body %}
     {% for repository in applications %}
-        <a href="{{ url('check', {organization: "gogcom", project: repository.name}) }}">{{ repository.name }}</a><br />
+        <a>{{ repository.name }}</a><br />
     {% endfor %}
 {% endblock %}
