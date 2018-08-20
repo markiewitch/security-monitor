@@ -24,7 +24,7 @@ if ($debug) {
     Debug::enable();
 }
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
+if ($trustedProxies = $env === 'dev' ? $_SERVER['REMOTE_ADDR'] : $_SERVER['TRUSTED_PROXIES'] ?? false) {
     Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
 }
 
