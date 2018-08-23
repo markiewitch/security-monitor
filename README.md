@@ -10,3 +10,12 @@ Your go to for monitoring security of your apps dependencies.
 1. Run `make up`
 
 Done, you can access the application on [www.security.dev](https://www.security.dev)
+
+## TODO list
+
+- [ ] Github/Gitlab webhook support
+- [ ] running checks on schedule
+- [ ] API for e.g. Icinga
+- [ ] secure storage of VCS credentials
+- [ ] authentication & authorization
+- [ ] closer integration with Github APIs (Checks API maybe?)
