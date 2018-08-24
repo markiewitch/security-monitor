@@ -15,7 +15,7 @@ class PackageReference
 
     /**
      * @var Project
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="packages")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="packages", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="uuid")
      * @ORM\Id()
      */
@@ -70,5 +70,20 @@ class PackageReference
 
         $this->lastVersion = $version;
         $this->lastSeenOn  = new \DateTime();
+    }
+
+    public function getVersion()
+    {
+        return $this->lastVersion;
+    }
+
+    public function getProjectName()
+    {
+        return $this->project->getOrganization() . "/" . $this->project->getName();
+    }
+
+    public function getProject()
+    {
+        return $this->project;
     }
 }

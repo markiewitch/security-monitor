@@ -29,7 +29,7 @@ class Package
 
     /**
      * @var PackageReference[]
-     * @ORM\OneToMany(targetEntity="PackageReference", mappedBy="package")
+     * @ORM\OneToMany(targetEntity="PackageReference", mappedBy="package", fetch="EXTRA_LAZY")
      */
     private $references;
 
@@ -42,5 +42,20 @@ class Package
     public function addReference(PackageReference $reference)
     {
         $this->references->add($reference);
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getReferences()
+    {
+        return $this->references;
     }
 }

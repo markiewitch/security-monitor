@@ -96,8 +96,10 @@
 
                 {% block menu %}
                     {% set menuLinks = [
-                        {'route': 'project_list', 'title': 'List projects'},
-                        {'route': 'connections_list', 'title': 'List VCS connections'},
+                        {'route': 'home', 'title': 'Home'},
+                        {'route': 'project_list', 'title': 'Projects'},
+                        {'route': 'connections_list', 'title': 'VCS connections'},
+                        {'route': 'packages_list', 'title': 'Packages'},
                     ] %}
                     {% for entry in menuLinks %}
                         <li><a href="{{ path(entry.route) }}">{{ entry.title }}</a></li>
