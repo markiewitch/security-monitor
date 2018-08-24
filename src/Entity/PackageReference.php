@@ -12,11 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PackageReference
 {
-    //    /**
-    //     * @var
-    //     * @ORM\Id()
-    //     */
-    //    private $projectId;
 
     /**
      * @var Project
