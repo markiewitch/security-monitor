@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="packages", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_package_name", columns={"vendor", "name"})
- * })
+ * @ORM\Table(name="packages")
  */
 class Package
 {
@@ -27,12 +25,6 @@ class Package
      * @var string
      * @ORM\Column(type="string")
      */
-    private $vendor;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
     private $name;
 
     /**
@@ -40,4 +32,15 @@ class Package
      * @ORM\OneToMany(targetEntity="PackageReference", mappedBy="package")
      */
     private $references;
+
+    public function __construct(string $name)
+    {
+        $this->name       = $name;
+        $this->references = new ArrayCollection();
+    }
+
+    public function addReference(PackageReference $reference)
+    {
+        $this->references->add($reference);
+    }
 }

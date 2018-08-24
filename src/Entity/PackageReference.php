@@ -12,15 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PackageReference
 {
-//    /**
-//     * @var
-//     * @ORM\Id()
-//     */
-//    private $projectId;
+    //    /**
+    //     * @var
+    //     * @ORM\Id()
+    //     */
+    //    private $projectId;
 
     /**
      * @var Project
-     * @ORM\OneToOne(targetEntity="Project", mappedBy="packages")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="packages")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="uuid")
      * @ORM\Id()
      */
@@ -50,4 +50,30 @@ class PackageReference
      * @ORM\Column(type="boolean")
      */
     private $isInstalled;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $lastVersion;
+
+    public function __construct(Project $project, Package $package, string $version)
+    {
+        $version = preg_replace('/^v/', '', $version);
+
+        $this->project     = $project;
+        $this->package     = $package;
+        $this->lastVersion = $version;
+        $this->firstSeenOn = new \DateTime();
+        $this->lastSeenOn  = new \DateTime();
+        $this->isInstalled = true;
+    }
+
+    public function updateLastSeen(string $version)
+    {
+        $version = preg_replace('/^v/', '', $version);
+
+        $this->lastVersion = $version;
+        $this->lastSeenOn  = new \DateTime();
+    }
 }
