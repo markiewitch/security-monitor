@@ -61,11 +61,18 @@ class Project
      */
     private $connection;
 
+    /**
+     * @var PackageReference[]
+     * @ORM\OneToMany(targetEntity="PackageReference", mappedBy="project")
+     */
+    private $packages;
+
     public function __construct(string $organization, string $name)
     {
         $this->organization = $organization;
         $this->name         = $name;
         $this->checks       = new ArrayCollection();
+        $this->packages     = new ArrayCollection();
     }
 
     public function getConnection(): VcsConnectionInterface
@@ -112,8 +119,4 @@ class Project
         $this->checks->add($check);
     }
 
-    public function onCheckWasRun(object $event)
-    {
-        //todo
-    }
 }
