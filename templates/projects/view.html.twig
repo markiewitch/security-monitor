@@ -37,7 +37,8 @@
             </div>
             <div class="box-body">
                 {% if lastCheck.wasSuccessful %}
-                    No vulnerabilities were found on {{ lastCheck.finishedAt | date }} <span class="fa fa-check text-success"></span>
+                    No vulnerabilities were found on {{ lastCheck.finishedAt | date }} <span
+                        class="fa fa-check text-success"></span>
                 {% else %}
                     {{ lastCheck.vulnerabilities|length }} vulnerable {{ lastCheck.vulnerabilities|length > 1 ? "packages were found" : "package was found" }} on {{ lastCheck.finishedAt | date }}
 
@@ -61,9 +62,63 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-body no-padding">
+                <canvas id="package-history" width="100%" height="30"></canvas>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
+    {#<script src="{{ asset('build/charts.js') }}"></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script>
+        var timeFormat = 'MM/DD/YYYY';
+        var ctx = document.querySelector("#package-history").getContext('2d');
 
+        function newDateString(days) {
+            return moment().subtract(days, 'd').format(timeFormat);
+        }
+
+        var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        newDateString(14),
+                        newDateString(3),
+                        newDateString(2),
+                        newDateString(1),
+                    ],
+                    datasets: [{
+                        data: [
+                            {t: newDateString(14), y: 1},
+                            {t: newDateString(3), y: 0},
+                            {t: newDateString(1), y: 0},
+                        ]
+                    }],
+                },
+                options:
+                    {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    format: timeFormat,
+                                    round: 'day'
+                                },
+                                display: true
+                            }],
+                            yAxes: [{
+                                type: 'linear',
+
+                            }]
+                        }
+                    }
+            })
+        ;
+    </script>
 {% endblock %}
 
