@@ -62,7 +62,7 @@ class Check
     public static function create(Project $project)
     {
         $check = new self($project);
-        $project->addCheck($check);
+//        $project->addCheck($check);
 
         return $check;
     }

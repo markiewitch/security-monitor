@@ -40,6 +40,8 @@ class SecurityChecker
         } else {
             $check->finishWithVulnerabilities($vulnerabilities);
         }
+
+        $project->addCheck($check);
         $this->projects->flush($project);
     }
 }
