@@ -19,6 +19,8 @@ class VulnerabilitiesChartDataProvider
     {
         $sql = "select MAX(vulnerabilities_count) as vulnerabilities, finished_at from checks c WHERE c.project_id = :project_id AND c.finished_at > DATE_SUB(NOW(), INTERVAL 31 DAY) GROUP BY DAY(c.finished_at)";
 
+        //todo we could fetch the json with CVEs and count them instead
+
         $checks = $this->connection->executeQuery(
             $sql,
             ['project_id' => $projectId],
