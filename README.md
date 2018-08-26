@@ -31,5 +31,6 @@ Done, you can access the application on [www.security.dev](https://www.security.
 - [ ] secure storage of VCS credentials
 - [ ] authentication & authorization
 - [ ] closer integration with Github APIs (Checks API maybe?)
-- [ ] list of packages installed per application with versions
-- [ ] list of applications using a given package
+- [x] list of packages installed per application with versions
+- [x] list of applications using a given package
+- [x] historical stats about vulnerable packages in project
