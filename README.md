@@ -3,6 +3,18 @@
 Your go to for monitoring security of your apps dependencies.
 
 
+## Features
+
+* Connect to GitHub/GitLab with your personal token
+* Track projects your personal access token has access to
+* more coming, see todo list at the bottom
+
+### Project overview
+
+On this page you can see the list of current vulnerabilities along with historical chart of their amount.
+
+![image](docs/project_report.png)
+
 ## Setting up
 
 > Assuming you have [Docker](https://www.docker.com/community-edition#/download) and [dory](https://github.com/FreedomBen/dory) with SSL certs stored in `~/.dinghy/certs`
