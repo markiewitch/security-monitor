@@ -54,6 +54,9 @@ class Package
         return $this->name;
     }
 
+    /**
+     * @return PackageReference[]|ArrayCollection
+     */
     public function getReferences()
     {
         return $this->references;

@@ -27,7 +27,7 @@ class OrmPackagesRepository
         return $qb->getQuery()->execute();
     }
 
-    public function findOne(int $id)
+    public function findOne(int $id): Package
     {
         $qb = $this->em->createQueryBuilder()
             ->select('p')
