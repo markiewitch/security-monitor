@@ -139,7 +139,8 @@ class Project
         $this->checks->add($check);
 
         if ($check->getFinishedAt() !== null) {
-            $this->lastCheckDate = $check->getFinishedAt();
+            $this->lastCheckDate          = $check->getFinishedAt();
+            $this->wasLastCheckSuccessful = $check->wasSuccessful();
         } else {
             // todo this dirty-covers checks that weren't finished properly during this call
             $this->lastCheckDate = new \DateTime();
