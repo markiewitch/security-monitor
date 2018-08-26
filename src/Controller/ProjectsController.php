@@ -8,6 +8,7 @@ use App\Entity\Project;
 use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
 use App\Service\SecurityChecker;
+use App\Service\VulnerabilitiesChartDataProvider;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -106,5 +107,17 @@ class ProjectsController extends Controller
         }
 
         return JsonResponse::create(['uuid' => $project->getUuid()]);
+    }
+
+    /**
+     * @Route(path="/{uuid}/chart.json", name="project_chart")
+     */
+    public function drawChart(string $uuid, VulnerabilitiesChartDataProvider $chartDataProvider)
+    {
+        $uuid = Uuid::fromString($uuid);
+
+        $data = $chartDataProvider->prepareData($uuid);
+
+        return new JsonResponse($data);
     }
 }
