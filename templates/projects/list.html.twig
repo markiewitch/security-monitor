@@ -7,9 +7,11 @@
             <div class="box-header">
                 <h3 class="box-title">{{ project.organization }}/{{ project.name }}
                     <small><a href="{{ path('project_check', {'projectUuid': project.uuid}) }}">Check</a></small>
+                    <small><a href="{{ path('project_view', {'uuid': project.uuid}) }}">Details</a></small>
                 </h3>
                 <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Expand"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Expand"><i
+                                class="fa fa-plus"></i></button>
                 </div>
             </div>
             <div class="box-body">
@@ -24,4 +26,22 @@
         </div>
 
     {% endfor %}
+
+    <ul class="pagination pagination-sm no-margin">
+        {% if page > 1 %}
+            <li>
+                <a href="{{ path('project_list', {page: 1}) }}">First</a>
+            </li>
+            {% if page > 2 %}
+                <li>
+                    <a href="{{ path('project_list', {page: page - 1}) }}">Previous</a>
+                </li>
+            {% endif %}
+        {% endif %}
+        <li>
+            <a href="{{ path('project_list', {page: page + 1}) }}">Next</a>
+        </li>
+
+    </ul>
+
 {% endblock %}

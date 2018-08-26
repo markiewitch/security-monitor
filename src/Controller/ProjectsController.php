@@ -28,8 +28,29 @@ class ProjectsController extends Controller
         $perPage = $request->query->getInt('perPage', 12);
         $page    = $request->query->getInt('page', 1);
 
-        return $this->render("projects/list.html.twig",
-                             ["projects" => $repository->fetchLatest($perPage, $perPage * ($page - 1))]);
+        return $this->render(
+            "projects/list.html.twig",
+            [
+                "projects" => $repository->fetchLatest($perPage, $perPage * ($page - 1)),
+                "page"     => $page,
+            ]);
+    }
+
+    /**
+     * @Route(path="/{uuid}", name="project_view")
+     */
+    public function view(string $uuid, ProjectsRepository $projects)
+    {
+        $uuid    = Uuid::fromString($uuid);
+        $project = $projects->find($uuid);
+
+        return $this->render(
+            "projects/view.html.twig",
+            [
+                "project"   => $project,
+                "lastCheck" => $project->getLastCheck(),
+            ]
+        );
     }
 
     /**

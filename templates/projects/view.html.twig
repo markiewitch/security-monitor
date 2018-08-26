@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-5">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Project details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table no-margin">
+                    <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ project.organization ~ '/' ~ project.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td class="text-{{ lastCheck.wasSuccessful ? 'success' : 'danger' }}">{{ lastCheck.wasSuccessful ? 'Healthy' : 'Sick' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tracked since</th>
+                        <td>{{ project.importedAt | date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Connection</th>
+                        <td><i>{{ project.connectionInfo.driver }}</i> at <i>{{ project.connectionInfo.host }}</i></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Last check</h3>
+            </div>
+            <div class="box-body">
+                {% if lastCheck.wasSuccessful %}
+                    No vulnerabilities were found on {{ lastCheck.finishedAt | date }} <span class="fa fa-check text-success"></span>
+                {% else %}
+                    {{ lastCheck.vulnerabilities|length }} vulnerable {{ lastCheck.vulnerabilities|length > 1 ? "packages were found" : "package was found" }} on {{ lastCheck.finishedAt | date }}
+
+                    <table class="table">
+                        <tbody>
+                        {% for package,details in lastCheck.vulnerabilities %}
+                            <tr>
+                                <td>{{ package }} {{ details.version }}</td>
+                                <td>
+                                    <ul>
+                                        {% for cve in details.advisories %}
+                                            <li><a href="{{ cve.link }}">{{ cve.title }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
+

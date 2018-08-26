@@ -31,6 +31,8 @@ class OrmProjectsRepository implements ProjectsRepository
         $qb = $this->em->createQueryBuilder()
             ->select('p')
             ->from('App:Project', 'p')
+            ->addOrderBy('p.lastCheckDate', 'desc')
+            ->addOrderBy('p.uuid')
             ->setMaxResults($limit)
             ->setFirstResult($after);
 

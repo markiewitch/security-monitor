@@ -67,12 +67,19 @@ class Project
      */
     private $packages;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $importedAt;
+
     public function __construct(string $organization, string $name)
     {
         $this->organization = $organization;
         $this->name         = $name;
         $this->checks       = new ArrayCollection();
         $this->packages     = new ArrayCollection();
+        $this->importedAt   = new \DateTime();
     }
 
     public function getConnection(): VcsConnectionInterface
@@ -89,6 +96,11 @@ class Project
     public function setConnection(VcsConnectionInfo $connection)
     {
         $this->connection = $connection;
+    }
+
+    public function getConnectionInfo()
+    {
+        return $this->connection;
     }
 
     public function getUuid(): UuidInterface
@@ -114,9 +126,32 @@ class Project
         return $this->checks->toArray();
     }
 
+    /**
+     * @return Check
+     */
+    public function getLastCheck()
+    {
+        return $this->checks->last();
+    }
+
     public function addCheck(Check $check)
     {
         $this->checks->add($check);
+
+        if ($check->getFinishedAt() !== null) {
+            $this->lastCheckDate = $check->getFinishedAt();
+        } else {
+            // todo this dirty-covers checks that weren't finished properly during this call
+            $this->lastCheckDate = new \DateTime();
+        }
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getImportedAt(): \DateTime
+    {
+        return $this->importedAt;
     }
 
 }

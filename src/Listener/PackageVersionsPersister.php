@@ -13,6 +13,7 @@ use Doctrine\ORM\ORMException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
 class PackageVersionsPersister implements EventSubscriberInterface
 {
