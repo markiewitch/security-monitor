@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Command\Handler;
 
+use App\Command\CheckForVulnerabilities;
 use App\Entity\Check;
-use App\Entity\Project;
 use App\Event\ProjectLockfileDownloaded;
 use App\Repository\ProjectsRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SecurityChecker
+class CheckForVulnerabilitiesHandler
 {
     /** @var ProjectsRepository */
     private $projects;
@@ -23,8 +23,9 @@ class SecurityChecker
         $this->events   = $events;
     }
 
-    public function check(Project $project)
+    public function __invoke(CheckForVulnerabilities $cmd)
     {
+        $project  = $this->projects->find($cmd->getProjectId());
         $client   = $project->getConnection();
         $check    = Check::create($project);
         $filename = tempnam(sys_get_temp_dir(), "security-monitor");
@@ -44,4 +45,5 @@ class SecurityChecker
         $project->addCheck($check);
         $this->projects->flush($project);
     }
+
 }

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Command\CheckForVulnerabilities;
 use App\Command\CreateProject;
 use App\Command\Exception\ProjectCreationFailure;
 use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
-use App\Service\SecurityChecker;
+use App\Service\System;
 use App\Service\VulnerabilitiesChartDataProvider;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +25,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProjectsController extends Controller
 {
+    private $system;
+
+    public function __construct(System $system)
+    {
+        $this->system = $system;
+    }
+
     /**
      * @Route(path="/", name="project_list")
      */
@@ -80,11 +89,15 @@ class ProjectsController extends Controller
      * @Route(path="/check/{projectUuid}", name="project_check")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function check(string $projectUuid, ProjectsRepository $repository, SecurityChecker $checker): Response
+    public function check(
+        string $projectUuid,
+        LoggerInterface $logger): Response
     {
-        $project = $repository->find(Uuid::fromString($projectUuid));
-
-        $checker->check($project);
+        try {
+            $this->system->command(new CheckForVulnerabilities($projectUuid));
+        } catch (\Throwable $t) {
+            $logger->error("Couldn't check project $projectUuid for vulnerable packages", ['exception' => $t]);
+        }
 
         return $this->redirectToRoute('project_list');
     }
@@ -95,11 +108,10 @@ class ProjectsController extends Controller
     public function create(
         string $organization,
         string $name,
-        int $connectionId,
-        MessageBusInterface $commandBus): Response
+        int $connectionId): Response
     {
         try {
-            $commandBus->dispatch(new CreateProject($connectionId, $organization, $name));
+            $this->system->command(new CreateProject($connectionId, $organization, $name));
         } catch (ProjectCreationFailure $e) {
             return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }

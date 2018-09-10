@@ -2,10 +2,12 @@ version: '3.4'
 
 services:
     php-upstream:
-        image: registry.gitlab.com/marszczybrew/php-fpm
+        image: kolemp/php-dev
         volumes:
             - ./:/data/application:delegated
             - ~/.composer:/root/.composer:delegated
+        env_file:
+            - .env
         working_dir: /data/application
         tmpfs:
             - /tmp/cache:exec,mode=0777
