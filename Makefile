@@ -17,3 +17,6 @@ build-front-dev:
 		yarn install && \
 		yarn run encore dev \
 	"
+
+fix-cache:
+	docker-compose exec php-upstream chmod -R 0777 /tmp

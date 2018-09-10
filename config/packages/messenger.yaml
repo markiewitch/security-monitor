@@ -1,0 +1,12 @@
+framework:
+    messenger:
+        default_bus: messenger.bus.commands
+        buses:
+            messenger.bus.commands: ~
+            messenger.bus.events: ~
+
+services:
+    _defaults:
+        bind:
+            $commandBus: '@messenger.bus.commands'
+            $eventBus: '@messenger.bus.events'
