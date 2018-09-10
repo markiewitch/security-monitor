@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Project;
+use App\Command\CreateProject;
+use App\Command\Exception\ProjectCreationFailure;
 use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
 use App\Service\SecurityChecker;
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -94,19 +96,15 @@ class ProjectsController extends Controller
         string $organization,
         string $name,
         int $connectionId,
-        ProjectsRepository $projects,
-        OrmConnectionsRepository $connections): Response
+        MessageBusInterface $commandBus): Response
     {
         try {
-            $connection = $connections->find($connectionId);
-            $project    = new Project($organization, $name);
-            $project->setConnection($connection);
-            $projects->persist($project);
-        } catch (\Throwable $t) {
-            return JsonResponse::create(['error' => $t->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+            $commandBus->dispatch(new CreateProject($connectionId, $organization, $name));
+        } catch (ProjectCreationFailure $e) {
+            return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return JsonResponse::create(['uuid' => $project->getUuid()]);
+        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
 
     /**

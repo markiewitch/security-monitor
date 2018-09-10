@@ -6,7 +6,7 @@ namespace App\Repository;
 use App\Entity\VcsConnectionInfo;
 use Doctrine\ORM\EntityManagerInterface;
 
-class OrmConnectionsRepository
+class OrmConnectionsRepository implements ConnectionsRepository
 {
     private $em;
 
