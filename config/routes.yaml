@@ -15,3 +15,10 @@ google_login:
 
 logout:
     path: /logout
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_security_logout:
+    path: /logout

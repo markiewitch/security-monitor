@@ -7,7 +7,7 @@ hwi_oauth:
             type:                sensio_connect
             client_id:           '%env(OAUTH_SENSIO_CLIENT)%'
             client_secret:       '%env(OAUTH_SENSIO_SECRET)%'
-            scope:               "SCOPE_PUBLIC"
+            scope:               "SCOPE_EMAIL SCOPE_PUBLIC"
             options:
                 csrf: true
 

@@ -24,7 +24,7 @@
         <!-- Menu Footer-->
         <li class="user-footer">
             <div class="pull-left">
-                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                <a href="{{ path('fos_user_profile_show') }}" class="btn btn-default btn-flat">Profile</a>
             </div>
             <div class="pull-right">
                 <a href="{{ path('logout') }}" class="btn btn-default btn-flat">Sign out</a>
@@ -35,7 +35,6 @@
 {% else %}
     <li class="user user-menu">
         <a href="{{ path('hwi_oauth_connect') }}">
-            {#<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">#}
             <span>Login</span>
         </a>
     </li>

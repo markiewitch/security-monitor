@@ -1,5 +1,8 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+            cost: 15
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username

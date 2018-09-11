@@ -6,7 +6,6 @@ namespace App\Service;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\VarDumper\VarDumper;
 
 class UserProvider extends FOSUBUserProvider
 {
@@ -40,8 +39,9 @@ class UserProvider extends FOSUBUserProvider
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $username = $response->getUsername();
+        $name     = $response->getRealName();
+        $email    = $response->getEmail();
         $user     = $this->userManager->findUserBy([$this->getProperty($response) => $username]);
-        VarDumper::dump($response);
         //when the user is registrating
         if (null === $user) {
             $service      = $response->getResourceOwner()->getName();
@@ -54,9 +54,9 @@ class UserProvider extends FOSUBUserProvider
             $user->$setter_token($response->getAccessToken());
             //I have set all requested data with the user's username
             //modify here with relevant data
-            $user->setUsername($username);
-            $user->setEmail($username);
-            $user->setPassword($username);
+            $user->setUsername($name);
+            $user->setEmail($email);
+            $user->setPlainPassword(md5($username . bin2hex(random_bytes(2))));
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
 
@@ -67,6 +67,7 @@ class UserProvider extends FOSUBUserProvider
         $serviceName = $response->getResourceOwner()->getName();
         $setter      = 'set' . ucfirst($serviceName) . 'AccessToken';
         //update access token
+        $user->setEmail($email);
         $user->$setter($response->getAccessToken());
 
         return $user;
