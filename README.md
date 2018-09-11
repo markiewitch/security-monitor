@@ -17,10 +17,19 @@ On this page you can see the list of current vulnerabilities along with historic
 
 ## Setting up
 
-> Assuming you have [Docker](https://www.docker.com/community-edition#/download) and [dory](https://github.com/FreedomBen/dory) with SSL certs stored in `~/.dinghy/certs`
-1. Run `make certs`
-1. Run `make up`
+> Assuming that you have [dory](https://github.com/FreedomBen/dory) with SSL certs stored in `~/.dinghy/certs` `https` will work out of the box.
 
+1. If you don't have `dory` installed add the following to `nginx` container definition in `docker-compose.yml`:
+
+```yaml
+ports:
+    - 10080:80
+```
+
+2. Run `make init`
+  
+  
+  
 Done, you can access the application on [www.security.dev](https://www.security.dev)
 
 ## TODO list
@@ -29,7 +38,8 @@ Done, you can access the application on [www.security.dev](https://www.security.
 - [ ] running checks on schedule
 - [ ] API for e.g. Icinga
 - [ ] secure storage of VCS credentials
-- [ ] authentication & authorization
+- [ ] authentication - SensioLabs Connect is implemented, more to come
+- [ ] authorization
 - [ ] closer integration with Github APIs (Checks API maybe?)
 - [x] list of packages installed per application with versions
 - [x] list of applications using a given package

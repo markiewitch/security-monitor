@@ -20,3 +20,5 @@ build-front-dev:
 
 fix-cache:
 	docker-compose exec php-upstream chmod -R 0777 /tmp
+
+init: up certs migrate build-front-dev
