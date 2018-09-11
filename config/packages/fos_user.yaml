@@ -1,0 +1,10 @@
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: App\Entity\User
+    from_email:
+        address: '%env(MAILER_USER_ADDRESS)%'
+        sender_name: '%env(MAILER_USER_NAME)%'
+    service:
+        mailer: 'fos_user.mailer.noop'
+        # mailer: 'fos_user.mailer.twig_swift' # Works as well

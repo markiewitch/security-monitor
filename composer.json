@@ -4,10 +4,12 @@
     "require": {
         "php": "^7.2",
         "ext-iconv": "*",
+        "friendsofsymfony/user-bundle": "^2.1",
         "hwi/oauth-bundle": "^0.6.3",
         "knplabs/github-api": "^2.7",
         "knplabs/knp-paginator-bundle": "^2.8",
         "m4tthumphrey/php-gitlab-api": "^9.6",
+        "paragonie/random_compat": "^2",
         "php-http/httplug-pack": "^1.1",
         "ramsey/uuid": "^3.7",
         "ramsey/uuid-doctrine": "^1.4",

@@ -1,14 +1,23 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: true
-
+            oauth:
+                resource_owners:
+                    sensio: /login/check-sensio
+                use_forward: false
+                oauth_user_provider:
+                    service: oauth_aware.user_provider
+                login_path: /login
+                failure_path: /login
             # activate different ways to authenticate
 
             # http_basic: true
