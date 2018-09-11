@@ -6,6 +6,7 @@ namespace App\Service;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
 class UserProvider extends FOSUBUserProvider
 {
@@ -40,6 +41,7 @@ class UserProvider extends FOSUBUserProvider
     {
         $username = $response->getUsername();
         $user     = $this->userManager->findUserBy([$this->getProperty($response) => $username]);
+        VarDumper::dump($response);
         //when the user is registrating
         if (null === $user) {
             $service      = $response->getResourceOwner()->getName();

@@ -10,6 +10,7 @@ security:
             security: false
         main:
             anonymous: true
+            logout: ~
             oauth:
                 resource_owners:
                     sensio: /login/check-sensio

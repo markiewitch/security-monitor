@@ -12,3 +12,6 @@ hwi_oauth_login:
 
 google_login:
     path: /login/check-sensio
+
+logout:
+    path: /logout
