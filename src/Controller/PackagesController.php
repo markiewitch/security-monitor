@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Repository\OrmPackagesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,10 +16,10 @@ class PackagesController extends Controller
     /**
      * @Route(path="/", name="packages_list")
      */
-    public function list(OrmPackagesRepository $packages)
+    public function list(OrmPackagesRepository $packages, Request $request)
     {
         $params = [
-            'packages' => $packages->fetchAll(),
+            'packages' => $packages->fetchAll($request->query->getInt('page', 1)),
         ];
 
         return $this->render('packages/list.html.twig', $params);
@@ -30,7 +31,7 @@ class PackagesController extends Controller
     public function package(OrmPackagesRepository $packages, int $id)
     {
         $params = [
-            'package' => $packages->findOne($id)
+            'package' => $packages->findOne($id),
         ];
 
         return $this->render('packages/view.html.twig', $params);

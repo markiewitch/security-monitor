@@ -1,23 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for package in packages %}
-            <tr>
-                <td>
-                    <a href="{{ path('package_view', {id: package.id}) }}">{{ package.name }}</a>
-                </td>
+    <div class="box">
+        <div class="box-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for package in packages %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('package_view', {id: package.id}) }}">{{ package.name }}</a>
+                        </td>
 
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer">
+            {{ knp_pagination_render(packages, 'pagination_box_footer.html.twig') }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

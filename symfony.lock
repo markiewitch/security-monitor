@@ -86,6 +86,12 @@
             "ref": "343a54894c535b6ef0d1a297f543793b3852ea9d"
         }
     },
+    "knplabs/knp-components": {
+        "version": "v1.3.10"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v2.8.0"
+    },
     "m4tthumphrey/php-gitlab-api": {
         "version": "9.6.1"
     },
@@ -254,6 +260,15 @@
     "symfony/lts": {
         "version": "4-dev"
     },
+    "symfony/messenger": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "f11dfa18618a8a5dd853ea3a302db2e0557e031c"
+        }
+    },
     "symfony/options-resolver": {
         "version": "v4.0.3"
     },
@@ -286,6 +301,15 @@
     },
     "symfony/stopwatch": {
         "version": "v4.0.3"
+    },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "1fb02a6e1c8f3d4232cce485c9afa868d63b115a"
+        }
     },
     "symfony/twig-bridge": {
         "version": "v4.0.3"
