@@ -30,7 +30,8 @@ ports:
   
   
   
-Done, you can access the application on [www.security.dev](https://www.security.dev)
+If you have `dory`, you can access the application on [www.security.dev](https://www.security.dev)
+If you don't, go to [localhost:10080](http://localhost:10080)
 
 ## TODO list
 
