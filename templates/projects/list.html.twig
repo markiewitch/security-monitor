@@ -28,20 +28,7 @@
     {% endfor %}
 
     <ul class="pagination pagination-sm no-margin">
-        {% if page > 1 %}
-            <li>
-                <a href="{{ path('project_list', {page: 1}) }}">First</a>
-            </li>
-            {% if page > 2 %}
-                <li>
-                    <a href="{{ path('project_list', {page: page - 1}) }}">Previous</a>
-                </li>
-            {% endif %}
-        {% endif %}
-        <li>
-            <a href="{{ path('project_list', {page: page + 1}) }}">Next</a>
-        </li>
-
+        {{ knp_pagination_render(projects, 'pagination_box_footer.html.twig') }}
     </ul>
 
 {% endblock %}
