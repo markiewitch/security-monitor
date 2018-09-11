@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-
 use App\Entity\Project;
-use Ramsey\Uuid\Uuid;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Ramsey\Uuid\UuidInterface;
 
 interface ProjectsRepository
 {
     /**
-     * @param int $limit
-     * @param int $after
-     * @return Project[]
+     * @return PaginationInterface|Project[]
      */
-    public function fetchLatest(int $limit = 10, int $after = 0): array;
+    public function fetchLatest(int $page = 1): PaginationInterface;
 
     public function persist(Project $project);
 

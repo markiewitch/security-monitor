@@ -37,14 +37,12 @@ class ProjectsController extends Controller
      */
     public function show(Request $request, ProjectsRepository $repository): Response
     {
-        $perPage = $request->query->getInt('perPage', 12);
         $page    = $request->query->getInt('page', 1);
 
         return $this->render(
             "projects/list.html.twig",
             [
-                "projects" => $repository->fetchLatest($perPage, $perPage * ($page - 1)),
-                "page"     => $page,
+                "projects" => $repository->fetchLatest($page),
             ]);
     }
 
