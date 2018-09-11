@@ -1,0 +1,41 @@
+{% if app.user is not null %}
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        <img src="https://dummyimage.com/160x160/000/fff.png&text=User" class="user-image" alt="User Image">
+        <span class="hidden-xs">{{ app.user.username }}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <!-- User image -->
+        <li class="user-header">
+            <img src="https://dummyimage.com/160x160/000/fff.png&text=User" class="img-circle" alt="User Image">
+
+            <p>
+                {{ app.user.username }}
+                <small>Member since Nov. 2012</small>
+            </p>
+        </li>
+        <!-- Menu Body -->
+        <li class="user-body">
+            <div class="row">
+                foo
+            </div>
+            <!-- /.row -->
+        </li>
+        <!-- Menu Footer-->
+        <li class="user-footer">
+            <div class="pull-left">
+                <a href="{{ path('fos_user_profile_show') }}" class="btn btn-default btn-flat">Profile</a>
+            </div>
+            <div class="pull-right">
+                <a href="{{ path('logout') }}" class="btn btn-default btn-flat">Sign out</a>
+            </div>
+        </li>
+    </ul>
+</li>
+{% else %}
+    <li class="user user-menu">
+        <a href="{{ path('hwi_oauth_connect') }}">
+            <span>Login</span>
+        </a>
+    </li>
+{% endif %}

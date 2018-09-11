@@ -1,0 +1,24 @@
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect_41.xml"
+    prefix:   /login
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect_41.xml"
+    prefix:   /login
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login_41.xml"
+    prefix:   /login
+
+google_login:
+    path: /login/check-sensio
+
+logout:
+    path: /logout
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_security_logout:
+    path: /logout

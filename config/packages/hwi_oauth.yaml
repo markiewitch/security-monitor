@@ -1,0 +1,19 @@
+hwi_oauth:
+    firewall_names: [main]
+
+    # https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/2-configuring_resource_owners.md
+    resource_owners:
+        sensio:
+            type:                sensio_connect
+            client_id:           '%env(OAUTH_SENSIO_CLIENT)%'
+            client_secret:       '%env(OAUTH_SENSIO_SECRET)%'
+            scope:               "SCOPE_EMAIL SCOPE_PUBLIC"
+            options:
+                csrf: true
+
+services:
+    oauth_aware.user_provider:
+        class: App\Service\UserProvider
+        arguments:
+            - '@fos_user.user_manager.default'
+            - {'sensio': 'sensioId'}

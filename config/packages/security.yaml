@@ -1,0 +1,37 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+            cost: 15
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            logout: ~
+            oauth:
+                resource_owners:
+                    sensio: /login/check-sensio
+                use_forward: false
+                oauth_user_provider:
+                    service: oauth_aware.user_provider
+                login_path: /login
+                failure_path: /login
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
