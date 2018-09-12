@@ -44,9 +44,24 @@ class VcsConnectionInfo
      */
     private $createdAt;
 
-    public function __construct()
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="connections")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $createdBy;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $public;
+
+    public function __construct(User $owner)
     {
         $this->createdAt = new \DateTime();
+        $this->createdBy = $owner;
+        $this->public    = false;
     }
 
     public function getId()

@@ -23,3 +23,7 @@ services:
     App\Command\Handler\:
         resource: '../src/Command/Handler'
         tags: ['messenger.message_handler']
+
+    App\Query\Handler\:
+        resource: '../src/Query/Handler'
+        tags: ['messenger.message_handler']
