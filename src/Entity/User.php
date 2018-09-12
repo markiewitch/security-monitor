@@ -5,10 +5,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="users")
+ * @method UuidInterface getId()
  */
 class User extends BaseUser
 {

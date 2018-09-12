@@ -125,4 +125,16 @@ class VcsConnectionInfo
 
         return $driver;
     }
+
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->public;
+    }
+
+
 }
