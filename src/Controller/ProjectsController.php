@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Command\CheckForVulnerabilities;
 use App\Command\CreateProject;
 use App\Command\Exception\ProjectCreationFailure;
+use App\Entity\User;
 use App\Repository\OrmConnectionsRepository;
 use App\Repository\ProjectsRepository;
 use App\Service\System;
@@ -17,8 +18,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @Route(path="/projects")
@@ -37,7 +39,7 @@ class ProjectsController extends Controller
      */
     public function show(Request $request, ProjectsRepository $repository): Response
     {
-        $page    = $request->query->getInt('page', 1);
+        $page = $request->query->getInt('page', 1);
 
         return $this->render(
             "projects/list.html.twig",
@@ -49,10 +51,16 @@ class ProjectsController extends Controller
     /**
      * @Route(path="/{uuid}", name="project_view")
      */
-    public function view(string $uuid, ProjectsRepository $projects)
+    public function view(string $uuid, ProjectsRepository $projects, TokenStorageInterface $tokenStorage)
     {
+        /** @var User $user */
+        $user    = $tokenStorage->getToken()->getUser();
         $uuid    = Uuid::fromString($uuid);
         $project = $projects->find($uuid);
+
+        if (!$project->getConnectionInfo()->isPublic() && !$project->getConnectionInfo()->getCreatedBy()->getId()->equals($user->getId())) {
+            throw new AccessDeniedHttpException("You don't have access to this project");
+        }
 
         return $this->render(
             "projects/view.html.twig",
@@ -61,6 +69,7 @@ class ProjectsController extends Controller
                 "lastCheck" => $project->getLastCheck(),
             ]
         );
+
     }
 
     /**
@@ -69,12 +78,19 @@ class ProjectsController extends Controller
     public function importFromConnection(
         Request $request,
         int $connectionId,
-        OrmConnectionsRepository $connectionsRepository)
+        OrmConnectionsRepository $connectionsRepository,
+        TokenStorageInterface $tokenStorage)
     {
+        /** @var User $user */
+        $user         = $tokenStorage->getToken()->getUser();
         $page         = $request->query->getInt('page', 1);
         $organization = $request->query->get('organization', '');
 
         $connectionInfo = $connectionsRepository->find($connectionId);
+
+        if (!$connectionInfo->isPublic() && $connectionInfo->getCreatedBy()->getId()->equals($user->getId())) {
+            throw new AccessDeniedHttpException("This connection isn't owned by you!");
+        }
 
         $available = $connectionInfo->getConnection()
             ->listProjects($organization, $page);
