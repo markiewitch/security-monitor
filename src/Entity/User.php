@@ -31,6 +31,15 @@ class User extends BaseUser
      * @ORM\Column(name="sensio_access_token", type="string", length=255, nullable=true)
      */
     protected $sensioAccessToken;
+    /**
+     * @ORM\Column(name="github_id", type="string", length=255, nullable=true)
+     */
+    protected $githubId;
+
+    /**
+     * @ORM\Column(name="github_access_token", type="string", length=255, nullable=true)
+     */
+    protected $githubAccessToken;
 
     /**
      * @var VcsConnectionInfo[]
@@ -53,5 +62,15 @@ class User extends BaseUser
     public function setSensioAccessToken(string $token)
     {
         $this->sensioAccessToken = $token;
+    }
+    
+    public function setGithubId(int $id)
+    {
+        $this->githubId = $id;
+    }
+
+    public function setGithubAccessToken(string $token)
+    {
+        $this->githubAccessToken = $token;
     }
 }

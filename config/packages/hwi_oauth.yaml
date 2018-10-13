@@ -10,10 +10,17 @@ hwi_oauth:
             scope:               "SCOPE_EMAIL SCOPE_PUBLIC"
             options:
                 csrf: true
+        github:
+            type:                github
+            client_id:           '%env(OAUTH_GITHUB_CLIENT)%'
+            client_secret:       '%env(OAUTH_GITHUB_SECRET)%'
+            scope:               "user:email,public_repo"
+            options:
+                csrf: true
 
 services:
     oauth_aware.user_provider:
         class: App\Service\UserProvider
         arguments:
             - '@fos_user.user_manager.default'
-            - {'sensio': 'sensioId'}
+            - {'sensio': 'sensioId', 'github': 'githubId'}

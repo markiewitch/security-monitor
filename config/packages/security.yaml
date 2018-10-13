@@ -17,6 +17,7 @@ security:
             oauth:
                 resource_owners:
                     sensio: /login/check-sensio
+                    github: /login/check-github
                 use_forward: false
                 oauth_user_provider:
                     service: oauth_aware.user_provider
