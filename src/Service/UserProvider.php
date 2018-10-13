@@ -42,6 +42,9 @@ class UserProvider extends FOSUBUserProvider
         $name     = $response->getRealName();
         $email    = $response->getEmail();
         $user     = $this->userManager->findUserBy([$this->getProperty($response) => $username]);
+
+        // todo check for existing user with this email, display appropriate message.
+
         //when the user is registrating
         if (null === $user) {
             $service      = $response->getResourceOwner()->getName();

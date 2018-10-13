@@ -64,7 +64,7 @@ class User extends BaseUser
         $this->sensioAccessToken = $token;
     }
     
-    public function setGithubId(string $id)
+    public function setGithubId(int $id)
     {
         $this->githubId = $id;
     }
