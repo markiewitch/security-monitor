@@ -5,16 +5,18 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="users")
+ * @method UuidInterface getId()
  */
 class User extends BaseUser
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="uuid_binary_ordered_time")
+     * @ORM\Column(type="uuid_binary_ordered_time", name="id")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
      */
@@ -29,6 +31,12 @@ class User extends BaseUser
      * @ORM\Column(name="sensio_access_token", type="string", length=255, nullable=true)
      */
     protected $sensioAccessToken;
+
+    /**
+     * @var VcsConnectionInfo[]
+     * @ORM\OneToMany(targetEntity="App\Entity\VcsConnectionInfo", mappedBy="createdBy")
+     */
+    private $connections;
 
 
     public function __construct()
