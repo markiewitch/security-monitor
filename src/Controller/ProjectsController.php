@@ -113,8 +113,7 @@ class ProjectsController extends Controller
         } catch (\Throwable $t) {
             $logger->error("Couldn't check project $projectUuid for vulnerable packages", ['exception' => $t]);
         }
-return new Response("");
-//        return $this->redirectToRoute('project_list');
+        return $this->redirectToRoute('project_list');
     }
 
     /**
