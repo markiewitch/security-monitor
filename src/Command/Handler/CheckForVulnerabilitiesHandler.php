@@ -39,7 +39,7 @@ class CheckForVulnerabilitiesHandler
         if (count($vulnerabilities) === 0) {
             $check->markAsFinishedSuccessfully();
         } else {
-            $check->finishWithVulnerabilities($vulnerabilities);
+            $check->finishWithVulnerabilities(json_decode((string)$vulnerabilities,true));
         }
 
         $project->addCheck($check);
