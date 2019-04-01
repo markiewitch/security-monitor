@@ -13,7 +13,7 @@
         "php-http/httplug-pack": "^1.1",
         "ramsey/uuid": "^3.7",
         "ramsey/uuid-doctrine": "^1.4",
-        "sensiolabs/security-checker": "^4.1",
+        "sensiolabs/security-checker": "^5",
         "symfony/console": "^4.0",
         "symfony/flex": "^1.0",
         "symfony/form": "^4.0",

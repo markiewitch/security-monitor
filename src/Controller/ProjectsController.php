@@ -88,7 +88,7 @@ class ProjectsController extends Controller
 
         $connectionInfo = $connectionsRepository->find($connectionId);
 
-        if (!$connectionInfo->isPublic() && $connectionInfo->getCreatedBy()->getId()->equals($user->getId())) {
+        if (!$connectionInfo->isPublic() && !$connectionInfo->getCreatedBy()->getId()->equals($user->getId())) {
             throw new AccessDeniedHttpException("This connection isn't owned by you!");
         }
 

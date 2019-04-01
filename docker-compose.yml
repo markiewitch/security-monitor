@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
     php-upstream:
-        image: kolemp/php-dev
+        image: kolemp/php-dev:7.2
         volumes:
             - ./:/data/application:delegated
             - ~/.composer:/root/.composer:delegated

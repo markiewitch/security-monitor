@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,7 +29,8 @@ class ConnectionsController extends Controller
     public function listAction(System $system): Response
     {
         $user        = $this->getUser();
-        $connections = $system->query(FetchVcsConnections::forUser($user->getId()));
+        $connections = $system->query(FetchVcsConnections::forUser($user->getId()))
+            ->last(HandledStamp::class)->getResult();
 
         return $this->render('connections/list.html.twig',
                              ['connections' => $connections]);
