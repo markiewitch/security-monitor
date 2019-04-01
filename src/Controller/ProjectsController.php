@@ -63,10 +63,10 @@ class ProjectsController extends Controller
         }
 
         return $this->render(
-            "projects/view.html.twig",
+            'projects/view.html.twig',
             [
-                "project" => $project,
-                "lastCheck" => $project->getLastCheck(),
+                'project' => $project,
+                'lastCheck' => $project->getLastCheck(),
             ]
         );
 
@@ -113,8 +113,8 @@ class ProjectsController extends Controller
         } catch (\Throwable $t) {
             $logger->error("Couldn't check project $projectUuid for vulnerable packages", ['exception' => $t]);
         }
-
-        return $this->redirectToRoute('project_list');
+return new Response("");
+//        return $this->redirectToRoute('project_list');
     }
 
     /**

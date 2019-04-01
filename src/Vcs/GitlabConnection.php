@@ -44,15 +44,12 @@ class GitlabConnection implements VcsConnectionInterface
 
     public function fetchLockfile(string $organization, string $project)
     {
-        $repositories = $this->client->projects()->all(['search' => "$project"]);
+        $repositories = $this->client->groups()->projects($organization, ['search' => $project]);
         $repository = array_values(array_filter($repositories,
             function (array $repository) use ($organization, $project) {
                 return $repository['path_with_namespace'] === "$organization/$project";
             }))[0];
         $repositoryId = $repository['id'];
-        //        VarDumper::dump($repository);
-        //        throw new \RuntimeException("not implemented");
         return $this->client->repositoryFiles()->getRawFile($repositoryId, 'composer.lock', 'master');
-        //        return base64_decode($this->client->repositoryFiles()->getRawFile();
     }
 }

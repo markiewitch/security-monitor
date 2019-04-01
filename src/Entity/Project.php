@@ -129,9 +129,9 @@ class Project
     /**
      * @return Check
      */
-    public function getLastCheck()
+    public function getLastCheck(): ?Check
     {
-        return $this->checks->last();
+        return $this->checks->count() > 1 ? $this->checks->last() : null;
     }
 
     public function addCheck(Check $check)
