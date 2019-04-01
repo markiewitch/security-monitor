@@ -19,16 +19,22 @@ class OrmPackagesRepository
     }
 
     /**
+     * @param string|null $search
      * @param int $page
      * @param int $perPage
      * @return \Knp\Component\Pager\Pagination\PaginationInterface|Package[]
      */
-    public function fetchAll(int $page = 1, int $perPage = 20)
+    public function fetchAll(?string $search = null, int $page = 1, int $perPage = 20)
     {
         $qb = $this->em->createQueryBuilder()
             ->select('p')
             ->from(Package::class, 'p')
             ->orderBy('p.name', 'ASC');
+
+        if ($search !== null) {
+            $qb->where('p.name LIKE :name')
+                ->setParameter('name', "%$search%");
+        }
 
         return $this->paginator->paginate($qb, $page, $perPage);
     }
