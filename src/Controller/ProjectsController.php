@@ -54,8 +54,8 @@ class ProjectsController extends Controller
     public function view(string $uuid, ProjectsRepository $projects, TokenStorageInterface $tokenStorage)
     {
         /** @var User $user */
-        $user    = $tokenStorage->getToken()->getUser();
-        $uuid    = Uuid::fromString($uuid);
+        $user = $tokenStorage->getToken()->getUser();
+        $uuid = Uuid::fromString($uuid);
         $project = $projects->find($uuid);
 
         if (!$project->getConnectionInfo()->isPublic() && !$project->getConnectionInfo()->getCreatedBy()->getId()->equals($user->getId())) {
@@ -65,7 +65,7 @@ class ProjectsController extends Controller
         return $this->render(
             "projects/view.html.twig",
             [
-                "project"   => $project,
+                "project" => $project,
                 "lastCheck" => $project->getLastCheck(),
             ]
         );
@@ -82,9 +82,10 @@ class ProjectsController extends Controller
         TokenStorageInterface $tokenStorage)
     {
         /** @var User $user */
-        $user         = $tokenStorage->getToken()->getUser();
-        $page         = $request->query->getInt('page', 1);
-        $organization = $request->query->get('organization', '');
+        $user = $tokenStorage->getToken()->getUser();
+        $page = $request->query->getInt('page', 1);
+        $organization = $request->query->get('organization');
+        $project = $request->query->get('project');
 
         $connectionInfo = $connectionsRepository->find($connectionId);
 
@@ -93,10 +94,10 @@ class ProjectsController extends Controller
         }
 
         $available = $connectionInfo->getConnection()
-            ->listProjects($organization, $page);
+            ->listProjects($organization, $project, $page);
 
         return $this->render("projects/import.html.twig",
-                             ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);
+            ['available' => $available, 'page' => $page, 'connectionId' => $connectionId]);
     }
 
     /**

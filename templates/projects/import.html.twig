@@ -13,6 +13,11 @@
                            title="Organization"
                            value="{{ app.request.query.get('organization', '') }}"/>
                 </div>
+                <label class="col-sm-2 control-label" for="project">Project</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="project" name="project" title="Project"
+                           value="{{ app.request.query.get('project', '') }}">
+                </div>
             </div>
         </form>
     </div>
@@ -20,7 +25,7 @@
         <div class="box-body">
             {% for repository in available %}
                 <a class="js-project-create"
-                   href="{{ url('project_create', {organization: repository.organization, name: repository.name, connectionId: repository.connectionId}) }}">{{ repository.name }}</a>
+                   href="{{ url('project_create', {organization: repository.organization, name: repository.name, connectionId: repository.connectionId}) }}">{{- repository.organization ~ '/' ~ repository.name -}}</a>
                 <br/>
             {% endfor %}
         </div>
