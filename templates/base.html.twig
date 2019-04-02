@@ -67,6 +67,7 @@
         <section class="sidebar">
 
             <!-- Sidebar user panel (optional) -->
+            {% if app.user != null %}
             <div class="user-panel">
                 <div class="pull-left image">
                     <img src="https://dummyimage.com/160x160/000/fff.png&text=User" class="img-circle" alt="User Image">
@@ -77,6 +78,7 @@
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
+            {% endif %}
 
             <!-- search form (Optional) -->
             <form action="#" method="get" class="sidebar-form">
