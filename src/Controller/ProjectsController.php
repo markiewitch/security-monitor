@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * @Route(path="/projects")
@@ -53,6 +54,7 @@ class ProjectsController extends Controller
      */
     public function view(string $uuid, ProjectsRepository $projects, TokenStorageInterface $tokenStorage)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         /** @var User $user */
         $user = $tokenStorage->getToken()->getUser();
         $uuid = Uuid::fromString($uuid);
@@ -113,6 +115,7 @@ class ProjectsController extends Controller
         } catch (\Throwable $t) {
             $logger->error("Couldn't check project $projectUuid for vulnerable packages", ['exception' => $t]);
         }
+//        return new Response("");
         return $this->redirectToRoute('project_list');
     }
 

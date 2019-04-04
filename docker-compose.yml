@@ -2,7 +2,8 @@ version: '3.4'
 
 services:
     php-upstream:
-        image: kolemp/php-dev:7.2
+        build:
+            context: ./docker/php
         volumes:
             - ./:/data/application:delegated
             - ~/.composer:/root/.composer:delegated

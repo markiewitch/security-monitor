@@ -93,12 +93,16 @@ class Project
         }
     }
 
-    public function setConnection(VcsConnectionInfo $connection)
+    public function getFile(string $path) {
+        return $this->getConnection()->fetchFile($this->organization, $this->name, $path);
+    }
+
+    public function setConnection(VcsConnectionInfo $connection): void
     {
         $this->connection = $connection;
     }
 
-    public function getConnectionInfo()
+    public function getConnectionInfo(): VcsConnectionInfo
     {
         return $this->connection;
     }

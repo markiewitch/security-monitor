@@ -33,10 +33,9 @@ class GithubConnection implements VcsConnectionInterface
         }, $projects);
     }
 
-    public function fetchLockfile(string $organization, string $project)
+    public function fetchFile(string $organization, string $project, string $path)
     {
-        return base64_decode($this->client->repositories()->contents()->show($organization, $project,
-            "composer.lock")["content"]);
-        throw new \RuntimeException("not implemented");
+        return base64_decode(
+            $this->client->repositories()->contents()->show($organization, $project, $path)["content"]);
     }
 }

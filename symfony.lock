@@ -107,6 +107,9 @@
     "m4tthumphrey/php-gitlab-api": {
         "version": "9.6.1"
     },
+    "monolog/monolog": {
+        "version": "1.24.0"
+    },
     "ocramius/package-versions": {
         "version": "1.2.0"
     },
@@ -287,6 +290,23 @@
             "ref": "f11dfa18618a8a5dd853ea3a302db2e0557e031c"
         }
     },
+    "symfony/monolog-bridge": {
+        "version": "v4.2.5"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.1",
+            "ref": "18ebf5a940573a20de06f9c4060101eeb438cf3d"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
+    },
     "symfony/options-resolver": {
         "version": "v4.0.3"
     },
@@ -301,6 +321,9 @@
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
+    },
+    "symfony/process": {
+        "version": "v4.2.5"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.3"

@@ -16,5 +16,5 @@ interface VcsConnectionInterface
      */
     public function listProjects(?string $organization = null, ?string $project = null, int $page = 1, int $perPage = 20): array;
 
-    public function fetchLockfile(string $organization, string $project);
+    public function fetchFile(string $organization, string $project, string $path);
 }

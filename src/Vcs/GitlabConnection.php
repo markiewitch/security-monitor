@@ -42,7 +42,7 @@ class GitlabConnection implements VcsConnectionInterface
         }, $projects);
     }
 
-    public function fetchLockfile(string $organization, string $project)
+    public function fetchFile(string $organization, string $project, string $path)
     {
         $repositories = $this->client->groups()->projects($organization, ['search' => $project]);
         $repository = array_values(array_filter($repositories,
@@ -50,6 +50,6 @@ class GitlabConnection implements VcsConnectionInterface
                 return $repository['path_with_namespace'] === "$organization/$project";
             }))[0];
         $repositoryId = $repository['id'];
-        return $this->client->repositoryFiles()->getRawFile($repositoryId, 'composer.lock', 'master');
+        return $this->client->repositoryFiles()->getRawFile($repositoryId, $path, 'master');
     }
 }

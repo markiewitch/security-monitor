@@ -30,7 +30,7 @@
                             {% endif %}
                             {% if connection.createdByCurrentUser %}
                                 <a href="{{ path('connections_view', {'id': connection.id}) }}"><span
-                                            title="View details" class="fa fa-search"></span>
+                                            title="View details" class="fa fa-pencil"></span>
                                 </a>
                             {% endif %}
                             <a href="{{ path('import_project', {'connectionId': connection.id }) }}">Import a
