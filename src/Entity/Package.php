@@ -22,6 +22,12 @@ class Package
     private $id;
 
     /**
+     * @var PackageType
+     * @ORM\Embedded(class="App\Entity\PackageType")
+     */
+    private $type;
+
+    /**
      * @var string
      * @ORM\Column(type="string")
      */
