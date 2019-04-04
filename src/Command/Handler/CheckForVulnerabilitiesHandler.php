@@ -5,8 +5,9 @@ namespace App\Command\Handler;
 
 use App\Command\CheckForVulnerabilities;
 use App\Entity\Check;
-use App\Event\ProjectLockfileDownloaded;
+use App\Event\PHPLockfileDownloaded;
 use App\Repository\ProjectsRepository;
+use SensioLabs\Security\SecurityChecker;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CheckForVulnerabilitiesHandler
@@ -18,7 +19,7 @@ class CheckForVulnerabilitiesHandler
 
     public function __construct(ProjectsRepository $projects, EventDispatcherInterface $events)
     {
-        $this->checker  = new \SensioLabs\Security\SecurityChecker();
+        $this->checker  = new SecurityChecker();
         $this->projects = $projects;
         $this->events   = $events;
     }
@@ -32,7 +33,7 @@ class CheckForVulnerabilitiesHandler
         $lockfile = $client->fetchLockfile($project->getOrganization(), $project->getName());
         file_put_contents($filename, $lockfile);
 
-        $this->events->dispatch(ProjectLockfileDownloaded::NAME, new ProjectLockfileDownloaded($project, $lockfile));
+        $this->events->dispatch(PHPLockfileDownloaded::NAME, new PHPLockfileDownloaded($project, $lockfile));
 
         $vulnerabilities = $this->checker->check($filename);
         unlink($filename);

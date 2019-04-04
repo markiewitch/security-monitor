@@ -39,9 +39,10 @@ class Package
      */
     private $references;
 
-    public function __construct(string $name)
+    public function __construct(string $name, PackageType $type)
     {
-        $this->name       = $name;
+        $this->name = $name;
+        $this->type = $type;
         $this->references = new ArrayCollection();
     }
 
@@ -58,6 +59,11 @@ class Package
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getType(): PackageType
+    {
+        return $this->type;
     }
 
     /**

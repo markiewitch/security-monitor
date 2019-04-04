@@ -7,7 +7,8 @@ namespace App\Listener;
 use App\Dto\LockfilePackage;
 use App\Entity\Package;
 use App\Entity\PackageReference;
-use App\Event\ProjectLockfileDownloaded;
+use App\Entity\PackageType;
+use App\Event\PHPLockfileDownloaded;
 use App\Repository\ProjectsRepository;
 use Doctrine\ORM\ORMException;
 use Psr\Log\LoggerInterface;
@@ -33,11 +34,11 @@ class PackageVersionsPersister implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ProjectLockfileDownloaded::NAME => 'onLockfileDownload',
+            PHPLockfileDownloaded::NAME => 'onLockfileDownload',
         ];
     }
 
-    public function onLockfileDownload(ProjectLockfileDownloaded $event)
+    public function onLockfileDownload(PHPLockfileDownloaded $event)
     {
         $this->logger->info("event received, ", ['event' => $event]);
 
@@ -50,7 +51,7 @@ class PackageVersionsPersister implements EventSubscriberInterface
         foreach ($this->readPackages($event->getContents()) as $lockfilePackage) {
             $package = $packages->findOneBy(['name' => $lockfilePackage->getName()]);
             if (!$package instanceof Package) {
-                $package = new Package($lockfilePackage->getName());
+                $package = new Package($lockfilePackage->getName(), PackageType::COMPOSER());
 
             }
 

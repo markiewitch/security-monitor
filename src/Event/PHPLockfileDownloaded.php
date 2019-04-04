@@ -7,7 +7,7 @@ namespace App\Event;
 use App\Entity\Project;
 use Symfony\Component\EventDispatcher\Event;
 
-class ProjectLockfileDownloaded extends Event
+class PHPLockfileDownloaded extends Event
 {
     public const NAME = 'project_lockfile_downloaded';
 
