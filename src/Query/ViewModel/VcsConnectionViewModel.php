@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Query\ViewModel;
 
+use DateTime;
+
 class VcsConnectionViewModel
 {
     /** @var int */
@@ -23,7 +25,7 @@ class VcsConnectionViewModel
         string $driver,
         string $host,
         bool $public,
-        \DateTime $createdAt,
+        DateTime $createdAt,
         bool $createdByCurrentUser)
     {
         $this->id                   = $id;

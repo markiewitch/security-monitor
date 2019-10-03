@@ -26,7 +26,12 @@
                         <td>{{ connection.createdAt|date }}</td>
                         <td>
                             {% if connection.createdByCurrentUser and not connection.public %}
-                                <span class="fa fa-lock"></span>
+                                <span title="Private" class="fa fa-lock"></span>
+                            {% endif %}
+                            {% if connection.createdByCurrentUser %}
+                                <a href="{{ path('connections_view', {'id': connection.id}) }}"><span
+                                            title="View details" class="fa fa-pencil"></span>
+                                </a>
                             {% endif %}
                             <a href="{{ path('import_project', {'connectionId': connection.id }) }}">Import a
                                 project</a></td>

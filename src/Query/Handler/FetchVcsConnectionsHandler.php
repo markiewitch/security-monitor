@@ -19,7 +19,7 @@ final class FetchVcsConnectionsHandler
     public function __invoke(FetchVcsConnections $query): iterable
     {
         $connections = $this->connection->executeQuery(
-            "SELECT *, user_id = :uuid AS is_owned FROM vcs_connections WHERE `public` = 1 OR user_id = :uuid",
+            "SELECT *, IF(user_id = :uuid, true, false) AS is_owned FROM vcs_connections WHERE `public` = 1 OR user_id = :uuid",
             ['uuid' => $query->getUserId(),],
             ['uuid' => 'uuid_binary_ordered_time']);
 

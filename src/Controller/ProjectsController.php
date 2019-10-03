@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * @Route(path="/projects")
@@ -53,9 +54,10 @@ class ProjectsController extends Controller
      */
     public function view(string $uuid, ProjectsRepository $projects, TokenStorageInterface $tokenStorage)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         /** @var User $user */
-        $user    = $tokenStorage->getToken()->getUser();
-        $uuid    = Uuid::fromString($uuid);
+        $user = $tokenStorage->getToken()->getUser();
+        $uuid = Uuid::fromString($uuid);
         $project = $projects->find($uuid);
 
         if (!$project->getConnectionInfo()->isPublic() && !$project->getConnectionInfo()->getCreatedBy()->getId()->equals($user->getId())) {
@@ -63,10 +65,10 @@ class ProjectsController extends Controller
         }
 
         return $this->render(
-            "projects/view.html.twig",
+            'projects/view.html.twig',
             [
-                "project"   => $project,
-                "lastCheck" => $project->getLastCheck(),
+                'project' => $project,
+                'lastCheck' => $project->getLastCheck(),
             ]
         );
 
@@ -82,21 +84,22 @@ class ProjectsController extends Controller
         TokenStorageInterface $tokenStorage)
     {
         /** @var User $user */
-        $user         = $tokenStorage->getToken()->getUser();
-        $page         = $request->query->getInt('page', 1);
-        $organization = $request->query->get('organization', '');
+        $user = $tokenStorage->getToken()->getUser();
+        $page = $request->query->getInt('page', 1);
+        $organization = $request->query->get('organization');
+        $project = $request->query->get('project');
 
         $connectionInfo = $connectionsRepository->find($connectionId);
 
-        if (!$connectionInfo->isPublic() && $connectionInfo->getCreatedBy()->getId()->equals($user->getId())) {
+        if (!$connectionInfo->isPublic() && !$connectionInfo->getCreatedBy()->getId()->equals($user->getId())) {
             throw new AccessDeniedHttpException("This connection isn't owned by you!");
         }
 
         $available = $connectionInfo->getConnection()
-            ->listProjects($organization, $page);
+            ->listProjects($organization, $project, $page);
 
         return $this->render("projects/import.html.twig",
-                             ["available" => $available, 'page' => $page, 'connectionId' => $connectionId]);
+            ['available' => $available, 'page' => $page, 'connectionId' => $connectionId]);
     }
 
     /**
@@ -112,7 +115,7 @@ class ProjectsController extends Controller
         } catch (\Throwable $t) {
             $logger->error("Couldn't check project $projectUuid for vulnerable packages", ['exception' => $t]);
         }
-
+//        return new Response("");
         return $this->redirectToRoute('project_list');
     }
 

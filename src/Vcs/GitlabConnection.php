@@ -20,33 +20,36 @@ class GitlabConnection implements VcsConnectionInterface
         $this->client = $client;
     }
 
-    public function listProjects(string $organization = '', int $page = 1, int $perPage = 20): array
+    public function listProjects(?string $organization = null, ?string $project = null, int $page = 1, int $perPage = 20): array
     {
-        if ($organization != '') {
-            $projects = $this->client->projects()->all(['search' => $organization, 'per_page' => $perPage, 'page' => $page]);
-        } else {
-            //        var_dump($this->client);die();
-            $projects = $this->client->projects()->all(['per_page' => $perPage, 'page' => $page]);
+        $params = ['per_page' => $perPage, 'page' => $page];
+
+        if ($project !== null) {
+            $params += ['search' => $project];
         }
 
-        //var_dump($projects);die();
+        if ($organization !== null) {
+            $projects = $this->client->groups()->projects($organization, $params);
+        } else {
+            $projects = $this->client->projects()->all($params);
+        }
+
         return array_map(function (array $gitlabProject) {
-            return new VcsProjectInfo($gitlabProject['namespace']['name'], $gitlabProject['name'],
-                                      $this->info->getId());
+            return new VcsProjectInfo(
+                $gitlabProject['namespace']['name'],
+                $gitlabProject['name'],
+                $this->info->getId());
         }, $projects);
     }
 
-    public function fetchLockfile(string $organization, string $project)
+    public function fetchFile(string $organization, string $project, string $path)
     {
-        $repositories = $this->client->projects()->all(['search' => "$project"]);
-        $repository   = array_values(array_filter($repositories,
+        $repositories = $this->client->groups()->projects($organization, ['search' => $project]);
+        $repository = array_values(array_filter($repositories,
             function (array $repository) use ($organization, $project) {
                 return $repository['path_with_namespace'] === "$organization/$project";
             }))[0];
         $repositoryId = $repository['id'];
-        //        VarDumper::dump($repository);
-        //        throw new \RuntimeException("not implemented");
-        return $this->client->repositoryFiles()->getRawFile($repositoryId, 'composer.lock', 'master');
-        //        return base64_decode($this->client->repositoryFiles()->getRawFile();
+        return $this->client->repositoryFiles()->getRawFile($repositoryId, $path, 'master');
     }
 }

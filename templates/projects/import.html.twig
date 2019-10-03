@@ -13,6 +13,12 @@
                            title="Organization"
                            value="{{ app.request.query.get('organization', '') }}"/>
                 </div>
+                <label class="col-sm-2 control-label" for="project">Project</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="project" name="project" title="Project"
+                           value="{{ app.request.query.get('project', '') }}">
+                </div>
+                <button type="submit" class="btn btn-default"><span class="fa fa-search"></span> Search</button>
             </div>
         </form>
     </div>
@@ -20,7 +26,7 @@
         <div class="box-body">
             {% for repository in available %}
                 <a class="js-project-create"
-                   href="{{ url('project_create', {organization: repository.organization, name: repository.name, connectionId: repository.connectionId}) }}">{{ repository.name }}</a>
+                   href="{{ url('project_create', {organization: repository.organization, name: repository.name, connectionId: repository.connectionId}) }}">{{- repository.organization ~ '/' ~ repository.name -}}</a>
                 <br/>
             {% endfor %}
         </div>
@@ -28,16 +34,16 @@
             <ul class="pagination pagination-sm no-margin">
                 {% if page > 1 %}
                     <li>
-                        <a href="{{ path('import_project', {connectionId: connectionId,page: 1, organization: app.request.query.get('organization', '')}) }}">First</a>
+                        <a href="{{ path('import_project', {connectionId: connectionId,page: 1, organization: app.request.query.get('organization', ''), project: app.request.query.get('project', '')}) }}">First</a>
                     </li>
                     {% if page > 2 %}
                         <li>
-                            <a href="{{ path('import_project', {connectionId: connectionId, page: page - 1, organization: app.request.query.get('organization', '') }) }}">Previous</a>
+                            <a href="{{ path('import_project', {connectionId: connectionId, page: page - 1, organization: app.request.query.get('organization', ''), project: app.request.query.get('project', '') }) }}">Previous</a>
                         </li>
                     {% endif %}
                 {% endif %}
                 <li>
-                    <a href="{{ path('import_project', {connectionId: connectionId, page: page + 1, organization: app.request.get('organization', '')}) }}">Next</a>
+                    <a href="{{ path('import_project', {connectionId: connectionId, page: page + 1, organization: app.request.get('organization', ''), project: app.request.query.get('project', '')}) }}">Next</a>
                 </li>
 
             </ul>

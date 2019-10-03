@@ -15,7 +15,11 @@
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td class="text-{{ lastCheck.wasSuccessful ? 'success' : 'danger' }}">{{ lastCheck.wasSuccessful ? 'Healthy' : 'Sick' }}</td>
+                        {% if lastCheck != null %}
+                            <td class="text-{{ lastCheck.wasSuccessful ? 'success' : 'danger' }}">{{ lastCheck.wasSuccessful ? 'Healthy' : 'Sick' }}</td>
+                        {% else %}
+                            <td class="text-warning">No information, please run the check.</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <th>Tracked since</th>
@@ -36,7 +40,9 @@
                 <h3 class="box-title">Last check</h3>
             </div>
             <div class="box-body">
-                {% if lastCheck.wasSuccessful %}
+                {% if lastCheck == null %}
+                    No info about vulnerabilities.
+                {% elseif lastCheck.wasSuccessful %}
                     No vulnerabilities were found on {{ lastCheck.finishedAt | date }} <span
                         class="fa fa-check text-success"></span>
                 {% else %}

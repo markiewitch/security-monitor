@@ -19,8 +19,9 @@ class GithubConnection implements VcsConnectionInterface
         $this->client = $client;
     }
 
-    public function listProjects(string $organization = '', int $page = 1, int $perPage = 20): array
+    public function listProjects(?string $organization = null, ?string $project = null, int $page = 1, int $perPage = 20): array
     {
+        //todo implement search
         if ($organization != '') {
             $projects = $this->client->organization()->repositories($organization, 'all', $page);
         } else {
@@ -32,10 +33,9 @@ class GithubConnection implements VcsConnectionInterface
         }, $projects);
     }
 
-    public function fetchLockfile(string $organization, string $project)
+    public function fetchFile(string $organization, string $project, string $path)
     {
-        return base64_decode($this->client->repositories()->contents()->show($organization, $project,
-            "composer.lock")["content"]);
-        throw new \RuntimeException("not implemented");
+        return base64_decode(
+            $this->client->repositories()->contents()->show($organization, $project, $path)["content"]);
     }
 }
